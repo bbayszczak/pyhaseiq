@@ -59,25 +59,25 @@ Pour faire cette extraction il faut
 
 Toutes les requetes semblent être faites en envoyant une string commencant par `_req=`
 
-| request             | étape(s) | description | réponse |
-|---------------------|----------|-------------|---------|
-| `_req=_l1h`         |5 besoin_bois|réponse toujours identique, aucune idée du sens|`(?)`|
-| `_req=_oemdev`      |          |réponse toujours identique, vu le nom, ça ressemble a un numéro de version|`2`|
-| `_req=_oemver`      |1,2,3,4,5|réponse toujours identique, semble être un numéro de version|`AAF_5815=9`|
-| `_req=_wversion`    |1,2,3,4,5|réponse toujours identique, semble être un numéro de version|`1.4`|
-| `_req=appAufheiz`   |2,3|`Aufheiz` veut dire chauffage en DE, uniquement sur les phases de montée en température, peut etre le pourcentage de montée en temp avant température nominale ?|nombre entre 0 et 100|
-| `_req=appErr`       |1,2,3,4,5|réponse toujours identique, pourrait indiquer une erreur dans l'app|`0`|
-| `_req=appNach`      |4|`Nach` veut dire "après" en Allemand, réponse toujours identique. aucune idée de la signification|`0`|
-| `_req=appP`         |4|uniquement pendant température nominale. Pourrait être l'indice de performance ?|int|
-| `_req=appP30T[x;x]` |1,2,3,4,5|au format `appP30T\[[0-9]+;[0-9]+\]`. Pourrait représenter une demande des mesures x à x sur les 30 dernières mesures. Les valeurs tournent toujours autour de `40` sauf 2/3 exceptions `70`, `9`, `21`, etc...|int|
-| `_req=appP30Tx`     |1,2,3,4,5|dans toutes les phases, pourrait représenter un nombre de mesures sur les 30 dernières ?  toujours à 30 dans les relevés actuels|`30`|
-| `_req=appPhase`     |1,2,3,4,5|phase de fonctionnement (voir plus bas)|`[0123]`|
-| `_req=appPT[x;x]`   |2,3,4,5|au format `appP30T\[[0-9]+;[0-9]+\]`. Pourrait représenter une demande des mesures x à x sur les 30 dernières mesures.|int|
-| `_req=appPT[x]`     |1,2|2 occurences seullent, aucune idée de ce que c'est|int|
-| `_req=appPTx`       |1,2,3,4,5|présent dans toutes les phases, je ne sais pas ce que ça représente|int|
-| `_req=appT`         |2,3|semble représenter la température pendant la phase de montée den température|float|
+| request             | encoded                    | étape(s) | description | réponse |
+|---------------------|----------------------------|---|---|---|
+| `_req=_l1h`         |                            | 5 | réponse toujours identique, aucune idée du sens | `(?)` |
+| `_req=_oemdev`      |                            |  | réponse toujours identique, vu le nom, ça ressemble a un numéro de version | `2` |
+| `_req=_oemver`      |                            | 1,2,3,4,5 | réponse toujours identique, semble être un numéro de version | `AAF_5815=9` |
+| `_req=_wversion`    |                            | 1,2,3,4,5 | réponse toujours identique, semble être un numéro de version | `1.4` |
+| `_req=appAufheiz`   | `X3JlcT1hcHBBdWZoZWl6Cg==` | 2,3 | `Aufheiz` veut dire chauffage en DE, uniquement sur les phases de montée en température, peut etre le pourcentage de montée en temp avant température nominale ? | nombre entre 0 et 100 |
+| `_req=appErr`       |                            | 1,2,3,4,5 | réponse toujours identique, pourrait indiquer une erreur dans l'app | `0` |
+| `_req=appNach`      |                            | 4 | `Nach` veut dire "après" en Allemand, réponse toujours identique. aucune idée de la signification | `0` |
+| `_req=appP`         |`X3JlcT1hcHBQCg==`          | 4 | uniquement pendant température nominale. Pourrait être l'indice de performance ? | int |
+| `_req=appP30T[x;x]` |                            | 1,2,3,4,5 | au format `appP30T\[[0-9]+;[0-9]+\]`. Pourrait représenter une demande des mesures x à x sur les 30 dernières mesures. Les valeurs tournent toujours autour de `40` sauf 2/3 exceptions `70`, `9`, `21`, etc... | int |
+| `_req=appP30Tx`     |                            | 1,2,3,4,5 | dans toutes les phases, pourrait représenter un nombre de mesures sur les 30 dernières ?  toujours à 30 dans les relevés actuels | `30` |
+| `_req=appPhase`     | `X3JlcT1hcHBQaGFzZQo=`     | 1,2,3,4,5 | phase de fonctionnement (voir plus bas) | `[0123]` |
+| `_req=appPT[x;x]`   |                            | 2,3,4,5 | au format `appP30T\[[0-9]+;[0-9]+\]`. Pourrait représenter une demande des mesures x à x sur les 30 dernières mesures. | int |
+| `_req=appPT[x]`     |                            | 1,2 | 2 occurences seulement, aucune idée de ce que c'est | int |
+| `_req=appPTx`       |                            | 1,2,3,4,5 | présent dans toutes les phases, je ne sais pas ce que ça représente | int |
+| `_req=appT`         | `X3JlcT1hcHBUCg==`         | 2,3 | semble représenter la température | float |
 
-### appPhase
+#### appPhase
 
 Le poele peut être dans plusieurs phases différence 
 
@@ -90,3 +90,14 @@ Le poele peut être dans plusieurs phases différence
 - *appPhase 3*: besoin de rajouter du bois
 
 - *appPhase 4*: ne plus ajouter de bois
+
+### Utilisation live websocket
+
+`./main.py`
+
+| `_req=`             | description                                                                      |
+|---------------------|----------------------------------------------------------------------------------|
+| `appAufheiz`        | peut etre le pourcentage de montée en temp avant température nominale ?          |
+| `appP`              | uniquement pendant température nominale. Pourrait être l'indice de performance ? |
+| `appPhase`          | phase de fonctionnement                                                          |
+| `appT`              | semble représenter la température                                                |
