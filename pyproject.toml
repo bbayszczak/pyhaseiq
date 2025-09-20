@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling >= 1.26", "websockets>=15, <16"]
+build-backend = "hatchling.build"
+
+[project]
+name = "haseiq_connect"
+version = "1.0.0"
+authors = [
+  { name="Benoit Bayszczak" },
+]
+description = "A small example package"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/bbayszczak/hase-iq-connect"
+Issues = "https://github.com/bbayszczak/hase-iq-connect/issues"
