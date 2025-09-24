@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "haseiq_connect"
-version = "1.0.0"
+version = "0.1.0"
 authors = [
   { name="Benoit Bayszczak" },
 ]
