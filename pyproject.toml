@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyhaseiq"
-version = "0.0.0"
+version = "0.1.0"
 description = "Read-only Python library for Hase iQ wood stoves, over their local WebSocket. Fully local, no cloud, no vendor app."
 readme = "README.md"
 license = "MIT"
