@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Captures réseau brutes : elles portent les adresses MAC du matériel réel.
+# Elles restent en local, jamais dans le dépôt. Voir la section « Méthode » de la spec.
+records/

@@ -12,8 +12,8 @@ génération `flamemonitor`**, via leur WebSocket local. Rien d'autre.
 jamais laisser entendre dans la documentation ou le code que la nouvelle fonctionne.
 
 Le protocole est intégralement décrit dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md),
-reconstitué par rétro-ingénierie à partir des captures de [`records/`](records/). Chaque
-affirmation y porte un statut ✅ validé / 🟡 partiel / ❓ supposé : s'y référer avant
+reconstitué par rétro-ingénierie à partir de captures réseau qui **ne sont pas versionnées** :
+elles portent les adresses MAC du matériel réel. Chaque affirmation y porte un statut ✅ validé / 🟡 partiel / ❓ supposé : s'y référer avant
 d'implémenter quoi que ce soit, et ne jamais coder sur la foi d'un point ❓.
 
 ## Structure
@@ -28,8 +28,8 @@ tests/
   fake.py        faux poêle (serveur WebSocket) rejouant les réponses réelles
 docs/
   SPEC-PROTOCOLE-WS.md
-records/
-  captures Wireshark décodées, une par phase, + extract.py qui les produit
+tools/
+  extract.py     décode un export Wireshark en dialogue lisible
 demo.py          script de démonstration, lecture seule
 ```
 
@@ -123,6 +123,10 @@ Toujours passer par `uv`. Python ≥ 3.13, CI sur 3.13 et 3.14.
   (R² = 0,992) mais pas exacte : le poêle y mêle autre chose.
 - ⛔ **Ne pas présenter les valeurs lues comme un dispositif de sécurité** — ni dans le code,
   ni dans la documentation. Elles sont indicatives.
+- ⛔ **Ne jamais committer de capture réseau brute** — `.pcap`, export Wireshark, ou sortie de
+  `tools/extract.py`. Une capture Ethernet porte les **adresses MAC** du poêle et du téléphone,
+  qui sont des identifiants matériels permanents. `records/` est dans `.gitignore` pour cette
+  raison ; ne pas l'en retirer.
 
 ## Sécurité
 
@@ -133,3 +137,7 @@ rappeler de ne jamais exposer le port `8080` sur Internet.
 Les traces ne contiennent ni identifiant, ni clé, ni donnée personnelle : il n'y a rien à
 masquer dans les logs, contrairement à d'autres protocoles domotiques. Si une requête porteuse
 de secret apparaissait un jour, ce constat serait à revoir.
+
+Cela vaut pour les traces de la bibliothèque, **pas pour les captures réseau** dont la spec est
+issue : au niveau Ethernet, elles portent les adresses MAC du matériel. Elles restent hors du
+dépôt.
