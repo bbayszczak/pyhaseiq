@@ -103,7 +103,7 @@ def parse_args() -> argparse.Namespace:
         metavar="NAME",
         action="append",
         help="send a raw request instead of the usual readings; repeatable "
-        "(names are listed in docs/SPEC-PROTOCOLE-WS.md)",
+        "(names are listed in docs/SPEC-WS-PROTOCOL.md)",
     )
     parser.add_argument("--debug", action="store_true", help="show the WebSocket dialogue")
     return parser.parse_args()

@@ -26,7 +26,7 @@ dependencies = ["websockets>=15"]
 [project.urls]
 Homepage = "https://github.com/bbayszczak/pyhaseiq"
 Repository = "https://github.com/bbayszczak/pyhaseiq"
-Specification = "https://github.com/bbayszczak/pyhaseiq/blob/main/docs/SPEC-PROTOCOLE-WS.md"
+Specification = "https://github.com/bbayszczak/pyhaseiq/blob/main/docs/SPEC-WS-PROTOCOL.md"
 
 [dependency-groups]
 # `rich` is only used by demo.py, which is not shipped in the wheel: it stays a dev dependency.
@@ -69,8 +69,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-# Les tests et leurs doublures n'ont pas besoin de docstrings ni d'annotations exhaustives :
-# les exiger ajoute du bruit sans rien apprendre au lecteur.
+# Tests and their doubles need neither docstrings nor exhaustive annotations: requiring them
+# adds noise without teaching the reader anything.
 "tests/**" = ["D", "ANN", "ARG", "PLR0911", "PLR2004"]
 
 [tool.ruff.lint.pydocstyle]
@@ -79,5 +79,5 @@ convention = "pep257"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
-# Le client est asynchrone : sans ce mode, chaque test async demanderait un marqueur explicite.
+# The client is asynchronous: without this mode, every async test would need an explicit marker.
 asyncio_mode = "auto"

@@ -15,7 +15,7 @@ class Phase(IntEnum):
     - ``BURNING_OUT``: the fire is dying out — do not add wood any more.
 
     ``BURNING_OUT`` is the one value never seen in the captures the protocol was reconstructed
-    from; it comes from the stove's own documentation. See ``docs/SPEC-PROTOCOLE-WS.md``.
+    from; it comes from the stove's own documentation. See ``docs/SPEC-WS-PROTOCOL.md``.
     """
 
     IDLE = 0

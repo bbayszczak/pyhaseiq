@@ -1,31 +1,32 @@
-# Politique de sécurité
+# Security policy
 
-## Versions suivies
+## Supported versions
 
-Le projet est en **alpha** : seule la dernière version publiée reçoit des correctifs.
+The project is in **alpha**: only the latest released version receives fixes.
 
-## Signaler une vulnérabilité
+## Reporting a vulnerability
 
-**N'ouvrez pas d'issue publique pour une faille de sécurité.**
+**Do not open a public issue for a security flaw.**
 
-Utilisez [le signalement privé de GitHub](https://github.com/bbayszczak/pyhaseiq/security/advisories/new),
-qui ouvre un canal confidentiel avec les mainteneurs. Une première réponse est visée sous 7 jours.
+Use [GitHub's private reporting](https://github.com/bbayszczak/pyhaseiq/security/advisories/new),
+which opens a confidential channel with the maintainers. A first response is aimed at within 7
+days.
 
-Merci d'inclure une description du problème, les étapes de reproduction et l'impact estimé.
+Please include a description of the problem, the steps to reproduce it and the estimated impact.
 
-## Le poêle n'a aucune authentification
+## The stove has no authentication
 
-Le poêle expose un **WebSocket non chiffré et sans authentification** sur le port `8080` :
-toute machine de votre réseau local peut l'interroger. Cette bibliothèque n'y change rien,
-elle ne fait que s'y connecter.
+The stove exposes an **unencrypted WebSocket with no authentication** on port `8080`: any
+machine on your local network can query it. This library changes nothing about that, it merely
+connects to it.
 
-**N'exposez jamais ce port sur Internet** et ne le redirigez pas depuis votre box. La seule
-protection dont dispose le poêle est de rester sur le réseau local.
+**Never expose this port on the Internet** and do not forward it from your router. The only
+protection the stove has is staying on the local network.
 
-Ce point relève de la conception du matériel, pas d'une faille de cette bibliothèque : inutile
-de le signaler comme tel.
+This comes from the design of the hardware, not from a flaw in this library: there is no point
+reporting it as such.
 
-## Rapports de bug
+## Bug reports
 
-La bibliothèque étant en lecture seule, ses traces ne contiennent ni identifiant, ni clé, ni
-donnée personnelle : une trace `DEBUG` peut être jointe telle quelle à une issue.
+Since the library is read-only, its traces contain no identifier, no key and no personal data: a
+`DEBUG` trace can be attached as is to an issue.

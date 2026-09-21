@@ -1,6 +1,6 @@
-# Les actions sont épinglées sur des SHA complets dans .github/workflows (protection contre
-# le redéplacement d'un tag). Dependabot est donc indispensable : sans lui, ces SHA figés ne
-# recevraient jamais les correctifs de sécurité amont.
+# Actions are pinned to full SHAs in .github/workflows (protection against a tag being moved).
+# Dependabot is therefore essential: without it, those frozen SHAs would never receive the
+# upstream security fixes.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -8,5 +8,5 @@ updates:
     schedule:
       interval: weekly
     commit-message:
-      # Conventional Commits : `ci` n'entraîne pas de release (cf. release-please).
+      # Conventional Commits: `ci` does not trigger a release (see release-please).
       prefix: ci
