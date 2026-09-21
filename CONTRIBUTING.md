@@ -2,8 +2,8 @@
 
 ## Périmètre
 
-`pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** pour les poêles Hase IQ
-de la génération `Flamemonitor`. Elle interroge le poêle et rend ce qu'il répond. Rien d'autre.
+`pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** pour les poêles Hase iQ
+de la génération `flamemonitor`. Elle interroge le poêle et rend ce qu'il répond. Rien d'autre.
 
 Historisation, moyennes, seuils, notifications, reconnexion automatique : tout cela appartient
 à la couche appelante — typiquement une intégration Home Assistant. Les propositions qui font

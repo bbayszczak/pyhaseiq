@@ -1,12 +1,12 @@
-# Protocole WebSocket des poêles Hase IQ (génération Flamemonitor)
+# Protocole WebSocket des poêles Hase iQ (génération flamemonitor)
 
 Spécification reconstituée par **observation du dialogue réseau** entre l'application
-`Flamemonitor` et un poêle Hase IQ, sur le réseau local de l'auteur. Aucun micrologiciel n'a
+`flamemonitor` et un poêle Hase iQ, sur le réseau local de l'auteur. Aucun micrologiciel n'a
 été décompilé, aucune clé ni aucun binaire du fabricant n'a été extrait.
 
-> ⚠️ **Deux générations de poêles portent le nom « Hase IQ ».** Celle décrite ici est
-> l'ancienne, pilotée par l'application **`Flamemonitor`**. La nouvelle, pilotée par
-> l'application **`Hase IQ`**, n'a pas été observée et n'est pas couverte par ce document.
+> ⚠️ **Deux générations de poêles portent le nom « Hase iQ ».** Celle décrite ici est
+> l'ancienne, pilotée par l'application **`flamemonitor`**. La nouvelle, pilotée par
+> l'application **`HASE iQ`**, n'a pas été observée et n'est pas couverte par ce document.
 
 ## Statut des affirmations
 
@@ -72,7 +72,7 @@ Les trames sont **textuelles** et **encodées en base64**, dans les deux sens.
 ## Écriture : aucune commande connue ✅
 
 **Aucune des trames observées n'écrit quoi que ce soit sur le poêle.** Toutes commencent par
-`_req=` et se contentent de lire. L'application `Flamemonitor` n'offre d'ailleurs aucun
+`_req=` et se contentent de lire. L'application `flamemonitor` n'offre d'ailleurs aucun
 réglage : elle affiche, elle ne commande pas.
 
 Rien ne prouve qu'un tel verbe n'existe pas dans le micrologiciel — seulement qu'aucun n'a été
@@ -106,7 +106,7 @@ cinq captures couvrant les phases 0 à 3.
 
 ### Ce que « phases où l'app l'envoie » veut dire ❓
 
-L'application `Flamemonitor` n'interroge `appT` et `appAufheiz` qu'en phase 1, et `appP` qu'en
+L'application `flamemonitor` n'interroge `appT` et `appAufheiz` qu'en phase 1, et `appP` qu'en
 phase 2. **On ignore si le poêle répond quand même hors de ces phases**, ou s'il reste muet :
 l'application ne demande simplement pas, donc aucune capture ne tranche.
 
@@ -182,7 +182,7 @@ typée ; elles restent accessibles via `Client.get("appP30T[15;29]")`.
 
 Les captures de [`records/`](../records/) ont été produites ainsi, une par phase.
 
-1. Capturer le trafic entre le téléphone et le poêle pendant que `Flamemonitor` tourne.
+1. Capturer le trafic entre le téléphone et le poêle pendant que `flamemonitor` tourne.
    Dans les captures, `192.168.1.115` est le téléphone et `192.168.1.165` le poêle.
 2. Ouvrir la capture dans Wireshark et appliquer ce filtre, qui écarte les trames de contrôle
    `ping`/`pong` (opcodes 9 et 10) :
@@ -205,7 +205,7 @@ Les captures de [`records/`](../records/) ont été produites ainsi, une par pha
 
 ## Ce qui reste ouvert
 
-- La génération pilotée par l'application `Hase IQ` : protocole inconnu, sans doute différent.
+- La génération pilotée par l'application `HASE iQ` : protocole inconnu, sans doute différent.
 - La phase `4`, jamais observée.
 - `appNach` et `_l1h`, constants dans toutes les captures.
 - L'unité et le pas de temps des séries `appPT` / `appP30T`.
