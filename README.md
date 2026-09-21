@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue)](https://www.python.org/downloads/)
 [![Licence](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 
-Bibliothèque Python **en lecture seule** pour les poêles à bois Hase IQ, via leur WebSocket
+Bibliothèque Python **en lecture seule** pour les poêles à bois Hase iQ, via leur WebSocket
 local. Entièrement locale : ni cloud, ni application constructeur, ni compte.
 
 > 🔍 **LECTURE SEULE — cette bibliothèque ne commande rien**
@@ -20,9 +20,9 @@ local. Entièrement locale : ni cloud, ni application constructeur, ni compte.
 
 > ⚠️ **PROJET INDÉPENDANT, SANS AUCUNE AFFILIATION**
 >
-> `pyhaseiq` n'est **en aucun cas** affilié, soutenu, approuvé ou validé par Hase
-> (Hase Kaminofenbau GmbH), ou l'une quelconque de ses filiales, marques, sociétés
-> apparentées, sous-traitants ou partenaires. *Hase*, *Hase IQ* et *Flamemonitor* sont des
+> `pyhaseiq` n'est **en aucun cas** affilié, soutenu, approuvé ou validé par HASE
+> Kaminofenbau GmbH, ou l'une quelconque de ses filiales, marques, sociétés apparentées,
+> sous-traitants ou partenaires. *HASE*, *Hase iQ* et *flamemonitor* sont des
 > marques de leurs titulaires respectifs, citées uniquement pour décrire le matériel avec
 > lequel cette bibliothèque communique, à des fins d'interopérabilité.
 >
@@ -34,10 +34,11 @@ local. Entièrement locale : ni cloud, ni application constructeur, ni compte.
 <summary><strong>⚠️ Avertissement complet — à lire avant toute utilisation</strong></summary>
 
 **Ce projet est totalement indépendant et n'est en aucun cas affilié, soutenu, approuvé
-ou validé par Hase (Hase Kaminofenbau GmbH), ou l'une quelconque de ses filiales,
-marques, sociétés apparentées, sous-traitants ou partenaires.**
+ou validé par HASE Kaminofenbau GmbH (Niederkircher Straße 14, 54294 Trier,
+Amtsgericht Wittlich HRB 4937), ou l'une quelconque de ses filiales, marques, sociétés
+apparentées, sous-traitants ou partenaires.**
 
-*Hase*, *Hase IQ* et *Flamemonitor* sont des marques de leurs titulaires respectifs.
+*HASE*, *Hase iQ* et *flamemonitor* sont des marques de leurs titulaires respectifs.
 Elles ne sont citées ici que pour **décrire le matériel avec lequel cette bibliothèque
 est susceptible de communiquer**, à des fins d'interopérabilité. Aucun code, aucun
 binaire, aucun micrologiciel, aucune clé cryptographique et aucune documentation du
@@ -107,13 +108,13 @@ ces conditions.
 
 ## Quelle génération ?
 
-**Deux générations de poêles portent le nom « Hase IQ »**, et elles ne parlent pas le même
+**Deux générations de poêles portent le nom « Hase iQ »**, et elles ne parlent pas le même
 langage. Elles se distinguent à l'application que vous utilisez :
 
 | votre application | génération | `pyhaseiq` |
 |---|---|---|
-| **`Flamemonitor`** | ancienne | ✅ supportée |
-| **`Hase IQ`** | nouvelle | ❌ non supportée |
+| **`flamemonitor`** | ancienne | ✅ supportée |
+| **`HASE iQ`** | nouvelle | ❌ non supportée |
 
 La nouvelle génération n'a pas été observée et son protocole est inconnu. Rien n'est prévu à ce
 sujet, et les retours sont les bienvenus.
@@ -307,7 +308,7 @@ uv run pytest            # tests — aucun matériel requis, le poêle est simul
 ## Contribuer
 
 Les retours sont bienvenus, en particulier sur **d'autres modèles de poêles** et sur la
-génération pilotée par l'application `Hase IQ`, jamais observée.
+génération pilotée par l'application `HASE iQ`, jamais observée.
 
 - **Signaler un bug ou proposer une évolution** —
   [ouvrir une issue](https://github.com/bbayszczak/pyhaseiq/issues/new/choose), en précisant
