@@ -1,4 +1,4 @@
-"""Read-only Python client for Hase IQ wood stoves, over their local WebSocket.
+"""Read-only Python client for Hase iQ wood stoves, over their local WebSocket.
 
 Independent project, not affiliated with any manufacturer — see the README. This library
 **only reads**: it implements no command that changes anything on the stove.

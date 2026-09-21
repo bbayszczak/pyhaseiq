@@ -5,9 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        ⚠️ **Deux générations de poêles portent le nom « Hase IQ ».** Cette bibliothèque ne
-        parle qu'à **l'ancienne**, celle pilotée par l'application `Flamemonitor`. Si votre
-        poêle se pilote avec l'application `Hase IQ`, elle ne fonctionnera pas — ce n'est pas
+        ⚠️ **Deux générations de poêles portent le nom « Hase iQ ».** Cette bibliothèque ne
+        parle qu'à **l'ancienne**, celle pilotée par l'application `flamemonitor`. Si votre
+        poêle se pilote avec l'application `HASE iQ`, elle ne fonctionnera pas — ce n'est pas
         un bug.
   - type: dropdown
     id: generation
@@ -15,8 +15,8 @@ body:
       label: Application de pilotage
       description: Celle que vous utilisez habituellement avec votre poêle.
       options:
-        - Flamemonitor (ancienne génération — supportée)
-        - Hase IQ (nouvelle génération — non supportée)
+        - flamemonitor (ancienne génération — supportée)
+        - Hase iQ (nouvelle génération — non supportée)
         - Je ne sais pas
     validations:
       required: true

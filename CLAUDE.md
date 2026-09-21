@@ -4,11 +4,11 @@ Contexte pour Claude Code sur ce dépôt.
 
 ## Le projet
 
-`pyhaseiq` est une bibliothèque **en lecture seule** pour les poêles à bois **Hase IQ de la
-génération `Flamemonitor`**, via leur WebSocket local. Rien d'autre.
+`pyhaseiq` est une bibliothèque **en lecture seule** pour les poêles à bois **Hase iQ de la
+génération `flamemonitor`**, via leur WebSocket local. Rien d'autre.
 
-⚠️ **Deux générations portent le nom « Hase IQ ».** Seule l'ancienne, pilotée par l'application
-`Flamemonitor`, est supportée ; celle de l'application `Hase IQ` n'a jamais été observée. Ne
+⚠️ **Deux générations portent le nom « Hase iQ ».** Seule l'ancienne, pilotée par l'application
+`flamemonitor`, est supportée ; celle de l'application `HASE iQ` n'a jamais été observée. Ne
 jamais laisser entendre dans la documentation ou le code que la nouvelle fonctionne.
 
 Le protocole est intégralement décrit dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md),

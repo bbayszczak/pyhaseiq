@@ -1,4 +1,4 @@
-"""Read-only asynchronous client for a Hase IQ stove."""
+"""Read-only asynchronous client for a Hase iQ stove."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ DEFAULT_TIMEOUT = 5.0
 
 
 class Client:
-    """A read-only connection to a Hase IQ stove.
+    """A read-only connection to a Hase iQ stove.
 
     **This client only reads.** The protocol carries no command that changes anything on the
     stove, and none is implemented here: every method asks a question and returns an answer.

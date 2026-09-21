@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Read a Hase IQ stove and show what it answers.
+"""Read a Hase iQ stove and show what it answers.
 
 **This script only reads.** Nothing it does can change anything on the stove — the protocol
 carries no write command and none is implemented.
