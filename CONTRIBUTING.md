@@ -1,20 +1,74 @@
-## Contribution Guidelines — Legal Notice
+# Contribuer
 
-By contributing to this repository, you agree to the following:
+## Périmètre
 
-1. **No Proprietary Code**  
-   You must not submit any code, firmware, or other materials that are proprietary to the device manufacturer or any third party.  
-   Contributions must be original or licensed under terms compatible with this project.  
+`pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** pour les poêles Hase IQ
+de la génération `Flamemonitor`. Elle interroge le poêle et rend ce qu'il répond. Rien d'autre.
 
-2. **No Protected Material**  
-   Do not include dumps, decompiled binaries, cryptographic keys, or any content obtained in violation of an End User License Agreement (EULA), Non-Disclosure Agreement (NDA), or similar restriction.  
+Historisation, moyennes, seuils, notifications, reconnexion automatique : tout cela appartient
+à la couche appelante — typiquement une intégration Home Assistant. Les propositions qui font
+remonter de l'état ici seront refusées.
 
-3. **Independent Work**  
-   Contributions must be the result of independent analysis and development. If you relied on reverse engineering, ensure it was performed lawfully and solely for the purpose of interoperability.  
+## Mise en route
 
-4. **License Compatibility**  
-   All contributions will be made available under the project’s license. By submitting code, you confirm that you have the right to do so under these terms.  
+```bash
+uv run ruff check .      # lint
+uv run ruff format .     # formatage
+uv run pytest            # tests — aucun matériel requis, le poêle est simulé
+```
 
----
+Python ≥ 3.13. Toujours passer par `uv`. Le linter est strict sur `src/` (docstrings et
+annotations obligatoires) ; les tests en sont dispensés.
 
-Any pull request that violates these requirements will be rejected. The maintainers reserve the right to remove contributions that put the project at legal risk.
+## Conventions
+
+- Commits en [Conventional Commits](https://www.conventionalcommits.org/), en anglais.
+  `release-please` s'en sert : seuls `feat:` et `fix:` déclenchent une release.
+- Documentation en français, code et docstrings en anglais.
+- Le protocole est décrit dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md), où
+  chaque affirmation porte un statut ✅ validé / 🟡 partiel / ❓ supposé. **Ne codez jamais sur
+  la foi d'un point ❓** : validez-le d'abord sur du matériel réel et mettez la spec à jour.
+- Les actions GitHub sont épinglées sur des SHA complets ; Dependabot les met à jour. Ne jamais
+  revenir à un tag mobile.
+
+## Interdits
+
+Un poêle à bois est un appareil à combustion installé chez quelqu'un. Ces points ne seront pas
+fusionnés :
+
+- ⛔ **Aucune écriture vers le poêle.** Aucune commande d'écriture n'a été observée dans le
+  protocole, aucune n'est implémentée, et c'est un choix permanent. Une bibliothèque de lecture
+  ne peut rien casser ; dès qu'elle écrit, cette garantie disparaît.
+- ⛔ **Ne pas balayer de noms de requêtes au hasard** sur un poêle réel. On ignore ce qu'un
+  `_req=` inconnu déclenche dans le micrologiciel. Les noms nouveaux se découvrent en observant
+  l'application constructeur, pas en devinant.
+- ⛔ **Ne pas faire remonter d'état** dans la bibliothèque : ni historique, ni cache, ni
+  moyenne, ni reconnexion automatique.
+- ⛔ **Ne pas présenter les valeurs lues comme une mesure de sécurité.** Elles sont indicatives
+  et ne remplacent aucun détecteur ni aucune obligation d'entretien.
+
+## Conditions juridiques des contributions
+
+En contribuant à ce dépôt, vous acceptez ce qui suit.
+
+1. **Aucun code propriétaire** — vous ne devez soumettre aucun code, micrologiciel ou autre
+   élément appartenant au fabricant ou à un tiers. Les contributions doivent être originales ou
+   sous une licence compatible avec celle de ce projet.
+
+2. **Aucun matériel protégé** — pas de dumps, de binaires décompilés, de clés cryptographiques,
+   ni de contenu obtenu en violation d'un contrat de licence utilisateur (EULA), d'un accord de
+   confidentialité (NDA) ou d'une restriction équivalente.
+
+3. **Travail indépendant** — les contributions doivent résulter d'une analyse et d'un
+   développement indépendants. Si vous vous êtes appuyé sur de la rétro-ingénierie, elle doit
+   avoir été menée licitement et aux seules fins d'interopérabilité.
+
+4. **Compatibilité de licence** — toute contribution est publiée sous la licence du projet. En
+   soumettant du code, vous confirmez en avoir le droit.
+
+Toute pull request qui enfreint ces conditions sera rejetée. Les mainteneurs se réservent le
+droit de retirer une contribution qui exposerait le projet à un risque juridique.
+
+## Sécurité
+
+Pour signaler une faille, voir [SECURITY.md](SECURITY.md) — jamais une issue publique.

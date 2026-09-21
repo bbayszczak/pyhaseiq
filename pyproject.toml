@@ -1,23 +1,83 @@
 [build-system]
-requires = ["hatchling >= 1.26", "websockets>=15, <16"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "haseiq_connect"
-version = "1.0.0"
-authors = [
-  { name="Benoit Bayszczak" },
-]
-description = "A small example package"
+name = "pyhaseiq"
+version = "0.0.0"
+description = "Read-only Python library for Hase IQ wood stoves, over their local WebSocket. Fully local, no cloud, no vendor app."
 readme = "README.md"
-requires-python = ">=3.9"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-]
 license = "MIT"
-license-files = ["LICEN[CS]E*"]
+requires-python = ">=3.13"
+authors = [{ name = "Benoit Bayszczak" }]
+keywords = ["hase", "iq", "flamemonitor", "wood-stove", "websocket", "home-automation", "home-assistant"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Home Automation",
+    "Typing :: Typed",
+]
+dependencies = ["websockets>=15"]
 
 [project.urls]
-Homepage = "https://github.com/bbayszczak/hase-iq-connect"
-Issues = "https://github.com/bbayszczak/hase-iq-connect/issues"
+Homepage = "https://github.com/bbayszczak/pyhaseiq"
+Repository = "https://github.com/bbayszczak/pyhaseiq"
+Specification = "https://github.com/bbayszczak/pyhaseiq/blob/main/docs/SPEC-PROTOCOLE-WS.md"
+
+[dependency-groups]
+# `rich` is only used by demo.py, which is not shipped in the wheel: it stays a dev dependency.
+dev = ["pytest>=8.3", "pytest-asyncio>=1.0", "rich>=14", "ruff>=0.13"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyhaseiq"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "LOG",  # flake8-logging: misuse of the logging module itself
+    "G",    # flake8-logging-format: lazy %s formatting, never an f-string in a log call
+    "SIM",  # flake8-simplify
+    "RET",  # flake8-return
+    "PTH",  # flake8-use-pathlib
+    "RUF",  # ruff-specific
+    "D",    # pydocstyle
+    "ANN",  # flake8-annotations
+    "TID",  # flake8-tidy-imports
+    "ARG",  # flake8-unused-arguments
+    "PL",   # pylint
+    "ASYNC",# flake8-async: blocking calls inside async functions
+]
+ignore = [
+    "D203",  # conflicts with D211
+    "D213",  # conflicts with D212
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Les tests et leurs doublures n'ont pas besoin de docstrings ni d'annotations exhaustives :
+# les exiger ajoute du bruit sans rien apprendre au lecteur.
+"tests/**" = ["D", "ANN", "ARG", "PLR0911", "PLR2004"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+# Le client est asynchrone : sans ce mode, chaque test async demanderait un marqueur explicite.
+asyncio_mode = "auto"
