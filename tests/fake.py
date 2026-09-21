@@ -1,6 +1,7 @@
-"""A fake stove: a local WebSocket server replaying the answers seen in `records/`.
+"""A fake stove: a local WebSocket server replaying answers captured from real hardware.
 
-Every value below was read from a real capture, so the tests exercise the parsing against
+Every value below was read from a real capture (the captures themselves are not committed:
+an Ethernet capture carries the hardware's MAC addresses), so the tests exercise the parsing against
 what the hardware actually sends — including `_oemver`, whose value carries a second `=`.
 """
 
@@ -14,7 +15,7 @@ from dataclasses import dataclass
 
 from websockets.asyncio.server import ServerConnection, serve
 
-# Real answers, taken from records/*.parsed.json.
+# Real answers, taken from captures of the vendor app talking to the stove.
 RESPONSES: Mapping[str, str] = {
     "appPhase": "2",
     "appT": "163.3",

@@ -15,7 +15,7 @@ def b64(text):
 @pytest.mark.parametrize(
     ("name", "expected"),
     [
-        # Exact payloads read off the captures in records/.
+        # Exact payloads read off real captures of the vendor app.
         ("appPhase", "X3JlcT1hcHBQaGFzZQ=="),
         ("appErr", "X3JlcT1hcHBFcnI="),
         ("_oemdev", "X3JlcT1fb2VtZGV2"),

@@ -83,8 +83,9 @@ reste : voir les interdits de [`CONTRIBUTING.md`](../CONTRIBUTING.md).
 
 ## Table des requêtes
 
-Les valeurs ci-dessous sont celles réellement observées dans [`records/`](../records/), sur
-cinq captures couvrant les phases 0 à 3.
+Les valeurs ci-dessous sont celles réellement observées sur cinq captures couvrant les phases
+0 à 3. Les captures elles-mêmes ne sont pas versionnées : une capture Ethernet porte les
+**adresses MAC** du poêle et du téléphone, qui sont des identifiants matériels permanents.
 
 | requête | valeur observée | phases où l'app l'envoie | statut | interprétation |
 |---|---|---|---|---|
@@ -180,7 +181,8 @@ typée ; elles restent accessibles via `Client.get("appP30T[15;29]")`.
 
 ## Méthode
 
-Les captures de [`records/`](../records/) ont été produites ainsi, une par phase.
+Les captures ont été produites ainsi, une par phase. Elles restent en local : voir
+l'avertissement ci-dessus.
 
 1. Capturer le trafic entre le téléphone et le poêle pendant que `flamemonitor` tourne.
    Dans les captures, `192.168.1.115` est le téléphone et `192.168.1.165` le poêle.
@@ -196,7 +198,7 @@ Les captures de [`records/`](../records/) ont été produites ainsi, une par pha
 4. Décoder l'export :
 
    ```bash
-   uv run records/extract.py records/<export>.json
+   uv run tools/extract.py <export>.json
    ```
 
    Le script écrit `<export>.json.parsed.json`, où chaque paquet devient `{src, dst, ts,
