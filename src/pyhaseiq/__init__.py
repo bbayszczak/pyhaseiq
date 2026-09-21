@@ -31,7 +31,7 @@ from .models import Phase
 # all, as recommended for libraries. Never add a handler, a level or a formatter here.
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-__version__ = "0.0.0"  # x-release-please-version
+__version__ = "0.1.0"  # x-release-please-version
 
 __all__ = [
     "DEFAULT_PORT",
