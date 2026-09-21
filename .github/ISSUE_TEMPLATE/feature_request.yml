@@ -1,0 +1,29 @@
+name: Proposition
+description: Une évolution de la bibliothèque
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        `pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** : elle interroge
+        le poêle, rien d'autre. Historisation, seuils, notifications et toute écriture
+        appartiennent à la couche appelante. Voir [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin
+      description: Le problème concret que cela résout, pas la solution envisagée.
+    validations:
+      required: true
+  - type: textarea
+    id: proposition
+    attributes:
+      label: Proposition
+      description: Ce que vous imaginez, et l'état de validation du protocole s'il est concerné.
+  - type: checkboxes
+    id: perimetre
+    attributes:
+      label: Périmètre
+      options:
+        - label: Cette proposition n'écrit rien sur le poêle et ne conserve aucun état dans la bibliothèque.
+          required: true

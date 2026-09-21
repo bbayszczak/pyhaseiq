@@ -1,0 +1,58 @@
+name: Rapport de bug
+description: Un comportement inattendu de la bibliothèque ou du poêle
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Deux générations de poêles portent le nom « Hase IQ ».** Cette bibliothèque ne
+        parle qu'à **l'ancienne**, celle pilotée par l'application `Flamemonitor`. Si votre
+        poêle se pilote avec l'application `Hase IQ`, elle ne fonctionnera pas — ce n'est pas
+        un bug.
+  - type: dropdown
+    id: generation
+    attributes:
+      label: Application de pilotage
+      description: Celle que vous utilisez habituellement avec votre poêle.
+      options:
+        - Flamemonitor (ancienne génération — supportée)
+        - Hase IQ (nouvelle génération — non supportée)
+        - Je ne sais pas
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Ce qui se passe, et ce que vous attendiez.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Les étapes, et le code minimal qui déclenche le problème.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions du poêle
+      description: >-
+        Sortie de `uv run demo.py <ip> --request _oemver --request _wversion --request _oemdev`.
+      placeholder: _oemver = AAF_5815=9, _wversion = 1.4, _oemdev = 2
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environnement
+      placeholder: macOS 15.4, Python 3.13, pyhaseiq 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Le dialogue WebSocket si vous l'avez (`demo.py --debug`). Rendu en bloc de code.
+      render: text
