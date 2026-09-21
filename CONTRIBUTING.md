@@ -1,74 +1,74 @@
-# Contribuer
+# Contributing
 
-## Périmètre
+## Scope
 
-`pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** pour les poêles Hase iQ
-de la génération `flamemonitor`. Elle interroge le poêle et rend ce qu'il répond. Rien d'autre.
+`pyhaseiq` is a **read-only** and **stateless** library for Hase iQ stoves of the
+`flamemonitor` generation. It queries the stove and returns what it answers. Nothing else.
 
-Historisation, moyennes, seuils, notifications, reconnexion automatique : tout cela appartient
-à la couche appelante — typiquement une intégration Home Assistant. Les propositions qui font
-remonter de l'état ici seront refusées.
+History, averages, thresholds, notifications, automatic reconnection: all of that belongs to
+the calling layer — typically a Home Assistant integration. Proposals that bring state back in
+here will be turned down.
 
-## Mise en route
+## Getting started
 
 ```bash
 uv run ruff check .      # lint
-uv run ruff format .     # formatage
-uv run pytest            # tests — aucun matériel requis, le poêle est simulé
+uv run ruff format .     # formatting
+uv run pytest            # tests — no hardware required, the stove is faked
 ```
 
-Python ≥ 3.13. Toujours passer par `uv`. Le linter est strict sur `src/` (docstrings et
-annotations obligatoires) ; les tests en sont dispensés.
+Python ≥ 3.13. Always go through `uv`. The linter is strict on `src/` (docstrings and
+annotations are mandatory); tests are exempt.
 
 ## Conventions
 
-- Commits en [Conventional Commits](https://www.conventionalcommits.org/), en anglais.
-  `release-please` s'en sert : seuls `feat:` et `fix:` déclenchent une release.
-- Documentation en français, code et docstrings en anglais.
-- Le protocole est décrit dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md), où
-  chaque affirmation porte un statut ✅ validé / 🟡 partiel / ❓ supposé. **Ne codez jamais sur
-  la foi d'un point ❓** : validez-le d'abord sur du matériel réel et mettez la spec à jour.
-- Les actions GitHub sont épinglées sur des SHA complets ; Dependabot les met à jour. Ne jamais
-  revenir à un tag mobile.
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/), in English.
+  `release-please` relies on them: only `feat:` and `fix:` trigger a release.
+- Everything is written in English: documentation, code and docstrings.
+- The protocol is described in [`docs/SPEC-WS-PROTOCOL.md`](docs/SPEC-WS-PROTOCOL.md), where
+  every statement carries a ✅ confirmed / 🟡 partial / ❓ assumed status. **Never write code on
+  the strength of a ❓ point**: confirm it on real hardware first, and update the spec.
+- GitHub actions are pinned to full SHAs; Dependabot updates them. Never go back to a moving
+  tag.
 
-## Interdits
+## Prohibitions
 
-Un poêle à bois est un appareil à combustion installé chez quelqu'un. Ces points ne seront pas
-fusionnés :
+A wood stove is a combustion appliance installed in someone's home. These points will not be
+merged:
 
-- ⛔ **Aucune écriture vers le poêle.** Aucune commande d'écriture n'a été observée dans le
-  protocole, aucune n'est implémentée, et c'est un choix permanent. Une bibliothèque de lecture
-  ne peut rien casser ; dès qu'elle écrit, cette garantie disparaît.
-- ⛔ **Ne pas balayer de noms de requêtes au hasard** sur un poêle réel. On ignore ce qu'un
-  `_req=` inconnu déclenche dans le micrologiciel. Les noms nouveaux se découvrent en observant
-  l'application constructeur, pas en devinant.
-- ⛔ **Ne pas faire remonter d'état** dans la bibliothèque : ni historique, ni cache, ni
-  moyenne, ni reconnexion automatique.
-- ⛔ **Ne pas présenter les valeurs lues comme une mesure de sécurité.** Elles sont indicatives
-  et ne remplacent aucun détecteur ni aucune obligation d'entretien.
+- ⛔ **No writing to the stove.** No write command has been observed in the protocol, none is
+  implemented, and that is a permanent choice. A read-only library cannot break anything; as
+  soon as it writes, that guarantee is gone.
+- ⛔ **Do not sweep request names at random** on a real stove. What an unknown `_req=` triggers
+  in the firmware is unknown. New names are discovered by observing the vendor application, not
+  by guessing.
+- ⛔ **Do not bring state back** into the library: no history, no cache, no average, no
+  automatic reconnection.
+- ⛔ **Do not present the values read as a safety measure.** They are indicative and replace
+  neither any detector nor any maintenance obligation.
 
-## Conditions juridiques des contributions
+## Legal terms of contributions
 
-En contribuant à ce dépôt, vous acceptez ce qui suit.
+By contributing to this repository, you accept the following.
 
-1. **Aucun code propriétaire** — vous ne devez soumettre aucun code, micrologiciel ou autre
-   élément appartenant au fabricant ou à un tiers. Les contributions doivent être originales ou
-   sous une licence compatible avec celle de ce projet.
+1. **No proprietary code** — you must not submit any code, firmware or other material belonging
+   to the manufacturer or to a third party. Contributions must be original or under a licence
+   compatible with this project's.
 
-2. **Aucun matériel protégé** — pas de dumps, de binaires décompilés, de clés cryptographiques,
-   ni de contenu obtenu en violation d'un contrat de licence utilisateur (EULA), d'un accord de
-   confidentialité (NDA) ou d'une restriction équivalente.
+2. **No protected material** — no dumps, no decompiled binaries, no cryptographic keys, and no
+   content obtained in breach of an end-user licence agreement (EULA), a non-disclosure
+   agreement (NDA) or an equivalent restriction.
 
-3. **Travail indépendant** — les contributions doivent résulter d'une analyse et d'un
-   développement indépendants. Si vous vous êtes appuyé sur de la rétro-ingénierie, elle doit
-   avoir été menée licitement et aux seules fins d'interopérabilité.
+3. **Independent work** — contributions must result from independent analysis and development.
+   If you relied on reverse engineering, it must have been carried out lawfully and for
+   interoperability purposes only.
 
-4. **Compatibilité de licence** — toute contribution est publiée sous la licence du projet. En
-   soumettant du code, vous confirmez en avoir le droit.
+4. **Licence compatibility** — every contribution is published under the project's licence. By
+   submitting code, you confirm that you have the right to do so.
 
-Toute pull request qui enfreint ces conditions sera rejetée. Les mainteneurs se réservent le
-droit de retirer une contribution qui exposerait le projet à un risque juridique.
+Any pull request that breaches these terms will be rejected. The maintainers reserve the right
+to withdraw a contribution that would expose the project to legal risk.
 
-## Sécurité
+## Security
 
-Pour signaler une faille, voir [SECURITY.md](SECURITY.md) — jamais une issue publique.
+To report a vulnerability, see [SECURITY.md](SECURITY.md) — never a public issue.

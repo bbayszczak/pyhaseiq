@@ -5,7 +5,7 @@ Wireshark writes the WebSocket payloads base64-encoded, one field per frame, and
 frames of a single TCP packet with a carriage return. This script decodes them and keeps only
 what the protocol analysis needs: who spoke, when, and what was said.
 
-See the "Méthode" section of ``../docs/SPEC-PROTOCOLE-WS.md`` for how to produce the export.
+See the "Method" section of ``../docs/SPEC-WS-PROTOCOL.md`` for how to produce the export.
 
 Usage: ``uv run tools/extract.py <export.json>`` — writes ``<export.json>.parsed.json``.
 

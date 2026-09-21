@@ -3,131 +3,126 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/bbayszczak/pyhaseiq/ci.yml?branch=main&label=CI)](https://github.com/bbayszczak/pyhaseiq/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/github/v/release/bbayszczak/pyhaseiq?label=version)](https://github.com/bbayszczak/pyhaseiq/releases/latest)
 [![Python](https://img.shields.io/badge/python-3.13%2B-blue)](https://www.python.org/downloads/)
-[![Licence](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-Bibliothèque Python **en lecture seule** pour les poêles à bois Hase iQ, via leur WebSocket
-local. Entièrement locale : ni cloud, ni application constructeur, ni compte.
+**Read-only** Python library for Hase iQ wood stoves, over their local WebSocket. Fully local:
+no cloud, no vendor app, no account.
 
-> 🔍 **LECTURE SEULE — cette bibliothèque ne commande rien**
+> 🔍 **READ-ONLY — THIS LIBRARY COMMANDS NOTHING**
 >
-> `pyhaseiq` **interroge** le poêle : température, phase de combustion, performance. Elle
-> n'écrit rien, ne règle rien, n'allume rien, n'éteint rien. Aucune commande d'écriture n'a été
-> observée dans le protocole, **aucune n'est implémentée**, et c'est un choix permanent du
-> projet — voir les [interdits](CONTRIBUTING.md#interdits).
+> `pyhaseiq` **queries** the stove: temperature, combustion phase, performance. It writes
+> nothing, sets nothing, lights nothing, extinguishes nothing. No write command has been
+> observed in the protocol, **none is implemented**, and that is a permanent choice of the
+> project — see the [prohibitions](CONTRIBUTING.md#prohibitions).
 >
-> Un poêle à bois est un appareil à combustion : sa conduite reste manuelle et relève de son
-> utilisateur. Cette bibliothèque **observe**, elle ne se substitue à aucun organe de sécurité.
+> A wood stove is a combustion appliance: operating it stays manual and is the responsibility
+> of its user. This library **observes**; it substitutes for no safety device.
 
-> ⚠️ **PROJET INDÉPENDANT, SANS AUCUNE AFFILIATION**
+> ⚠️ **INDEPENDENT PROJECT, WITH NO AFFILIATION WHATSOEVER**
 >
-> `pyhaseiq` n'est **en aucun cas** affilié, soutenu, approuvé ou validé par HASE
-> Kaminofenbau GmbH, ou l'une quelconque de ses filiales, marques, sociétés apparentées,
-> sous-traitants ou partenaires. *HASE*, *Hase iQ* et *flamemonitor* sont des
-> marques de leurs titulaires respectifs, citées uniquement pour décrire le matériel avec
-> lequel cette bibliothèque communique, à des fins d'interopérabilité.
+> `pyhaseiq` is **in no way** affiliated with, supported, endorsed or approved by HASE
+> Kaminofenbau GmbH, or any of its subsidiaries, brands, related companies, subcontractors or
+> partners. *HASE*, *Hase iQ* and *flamemonitor* are trademarks of their respective owners,
+> cited solely to describe the hardware this library communicates with, for interoperability
+> purposes.
 >
-> 👉 **Lisez l'avertissement complet ci-dessous avant toute utilisation.** Il couvre
-> l'**absence totale de garantie**, la **garantie constructeur** et les conditions d'usage. En
-> utilisant cette bibliothèque, vous reconnaissez les avoir lues et acceptées.
+> 👉 **Read the full disclaimer below before any use.** It covers the **complete absence of
+> warranty**, the **manufacturer's warranty** and the conditions of use. By using this library,
+> you acknowledge having read and accepted them.
 
 <details>
-<summary><strong>⚠️ Avertissement complet — à lire avant toute utilisation</strong></summary>
+<summary><strong>⚠️ Full disclaimer — read before any use</strong></summary>
 
-**Ce projet est totalement indépendant et n'est en aucun cas affilié, soutenu, approuvé
-ou validé par HASE Kaminofenbau GmbH (Niederkircher Straße 14, 54294 Trier,
-Amtsgericht Wittlich HRB 4937), ou l'une quelconque de ses filiales, marques, sociétés
-apparentées, sous-traitants ou partenaires.**
+**This project is entirely independent and is in no way affiliated with, supported,
+endorsed or approved by HASE Kaminofenbau GmbH (Niederkircher Straße 14, 54294 Trier,
+Amtsgericht Wittlich HRB 4937), or any of its subsidiaries, brands, related companies,
+subcontractors or partners.**
 
-*HASE*, *Hase iQ* et *flamemonitor* sont des marques de leurs titulaires respectifs.
-Elles ne sont citées ici que pour **décrire le matériel avec lequel cette bibliothèque
-est susceptible de communiquer**, à des fins d'interopérabilité. Aucun code, aucun
-binaire, aucun micrologiciel, aucune clé cryptographique et aucune documentation du
-fabricant n'est reproduit ni redistribué dans ce dépôt.
+*HASE*, *Hase iQ* and *flamemonitor* are trademarks of their respective owners. They are
+cited here only to **describe the hardware this library may communicate with**, for
+interoperability purposes. No code, binary, firmware, cryptographic key or manufacturer
+documentation is reproduced or redistributed in this repository.
 
-**Nom du projet** — `pyhaseiq` est un nom d'usage choisi pour sa lisibilité. Il
-n'emporte aucune affiliation, ne constitue ni une marque, ni une revendication
-d'origine, ni une autorisation du titulaire de la marque *Hase*. Cette bibliothèque est
-un composant tiers **compatible avec** ce matériel, et rien d'autre.
+**Project name** — `pyhaseiq` is a working name chosen for readability. It carries no
+affiliation, and constitutes neither a trademark, nor a claim of origin, nor an
+authorisation from the owner of the *Hase* trademark. This library is a third-party
+component **compatible with** this hardware, and nothing more.
 
-**Méthode** — le protocole documenté ici a été reconstitué par la seule observation du
-dialogue réseau entre l'application constructeur et un poêle acquis légalement, sur une
-installation appartenant à l'auteur. Aucune décompilation de micrologiciel, aucune
-extraction ni publication de clé cryptographique constructeur n'a été réalisée. Ce
-travail relève de l'exception d'interopérabilité (art. L122-6-1 III et IV du Code de la
-propriété intellectuelle, directive 2009/24/CE art. 5 et 6).
+**Method** — the protocol documented here was reconstructed solely by observing the
+network dialogue between the vendor application and a legally acquired stove, on an
+installation belonging to the author. No firmware was decompiled, and no manufacturer
+cryptographic key was extracted or published. This work falls under the interoperability
+exception (art. L122-6-1 III and IV of the French Intellectual Property Code, directive
+2009/24/EC art. 5 and 6).
 
-**Lecture seule** — cette bibliothèque n'émet aucune commande d'écriture vers le poêle.
-Elle ne modifie aucun réglage, ne déclenche ni n'interrompt aucune combustion. La
-conduite du poêle reste entièrement manuelle et sous la responsabilité de son
-utilisateur, conformément à la notice du fabricant.
+**Read-only** — this library sends no write command to the stove. It changes no setting,
+and neither starts nor interrupts any combustion. Operating the stove stays entirely
+manual and under the responsibility of its user, in accordance with the manufacturer's
+manual.
 
-**Aucun rôle de sécurité** — les valeurs lues sont fournies à titre indicatif. Elles ne
-constituent ni une mesure certifiée, ni une alarme, ni un dispositif de sécurité, et ne
-remplacent en rien un détecteur de fumée, un détecteur de monoxyde de carbone ou le
-ramonage réglementaire de votre installation. **Ne fondez aucune décision de sécurité
-sur cette bibliothèque.**
+**No safety role** — the values read are provided for information only. They constitute
+neither a certified measurement, nor an alarm, nor a safety device, and are no substitute
+whatsoever for a smoke detector, a carbon monoxide detector or the statutory sweeping of
+your installation. **Base no safety decision on this library.**
 
-**Usage** — cette bibliothèque est destinée à la lecture d'équipements dont vous êtes
-propriétaire ou légitime utilisateur, et à eux seuls.
+**Use** — this library is intended for reading equipment that you own or are the
+legitimate user of, and that alone.
 
-**Absence de garantie** — ce logiciel est fourni « tel quel », sans aucune garantie
-d'aucune sorte, expresse ou implicite, y compris, sans s'y limiter, les garanties de
-qualité marchande, d'adéquation à un usage particulier et d'absence de contrefaçon.
-Dans les limites permises par le droit applicable, l'auteur ne saurait être tenu
-responsable d'un quelconque dommage : dysfonctionnement, détérioration de matériel,
-perte de données, ou tout dommage direct ou indirect résultant de l'utilisation de
-cette bibliothèque.
+**No warranty** — this software is provided "as is", without warranty of any kind, express
+or implied, including but not limited to the warranties of merchantability, fitness for a
+particular purpose and non-infringement. To the extent permitted by applicable law, the
+author shall not be held liable for any damage whatsoever: malfunction, hardware damage,
+data loss, or any direct or indirect damage resulting from the use of this library.
 
-**Garantie constructeur** — l'usage de ce logiciel avec votre matériel est susceptible
-d'en affecter la garantie. Vérifiez-le avant de l'utiliser.
+**Manufacturer's warranty** — using this software with your hardware may affect its
+warranty. Check before using it.
 
-**Support** — assuré bénévolement, sans engagement de délai ni de résultat.
+**Support** — provided on a voluntary basis, with no commitment as to delay or outcome.
 
-**Licence** — MIT, voir [LICENSE](LICENSE).
+**License** — MIT, see [LICENSE](LICENSE).
 
-En utilisant cette bibliothèque, vous reconnaissez avoir lu et accepté l'ensemble de
-ces conditions.
+By using this library, you acknowledge having read and accepted all of these conditions.
 
 </details>
 
 ---
 
-## Sommaire
+## Contents
 
-- [Quelle génération ?](#quelle-génération-)
-- [Démarrage rapide](#démarrage-rapide)
-- [État du projet](#état-du-projet)
+- [Which generation?](#which-generation)
+- [Quick start](#quick-start)
+- [Project status](#project-status)
 - [Installation](#installation)
-- [Utilisation](#utilisation)
+- [Usage](#usage)
 - [Logging](#logging)
-- [Développement](#développement)
-- [Contribuer](#contribuer)
-- [Sécurité](#sécurité)
+- [Development](#development)
+- [Contributing](#contributing)
+- [Security](#security)
 
 ---
 
-## Quelle génération ?
+## Which generation?
 
-**Deux générations de poêles portent le nom « Hase iQ »**, et elles ne parlent pas le même
-langage. Elles se distinguent à l'application que vous utilisez :
+**Two generations of stoves carry the name "Hase iQ"**, and they do not speak the same
+language. They are told apart by the application you use:
 
-| votre application | génération | `pyhaseiq` |
+| your application | generation | `pyhaseiq` |
 |---|---|---|
-| **`flamemonitor`** | ancienne | ✅ supportée |
-| **`HASE iQ`** | nouvelle | ❌ non supportée |
+| **`flamemonitor`** | old | ✅ supported |
+| **`HASE iQ`** | new | ❌ not supported |
 
-La nouvelle génération n'a pas été observée et son protocole est inconnu. Rien n'est prévu à ce
-sujet, et les retours sont les bienvenus.
+The new generation has not been observed and its protocol is unknown. Nothing is planned on
+that front, and feedback is welcome.
 
-Le protocole de l'ancienne est intégralement décrit dans
-[`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md), où chaque affirmation porte un statut
-✅ validé / 🟡 partiel / ❓ supposé.
+The protocol of the old one is described in full in
+[`docs/SPEC-WS-PROTOCOL.md`](docs/SPEC-WS-PROTOCOL.md), where every statement carries a
+✅ confirmed / 🟡 partial / ❓ assumed status.
 
 ---
 
-## Démarrage rapide
+## Quick start
 
-Avec [`uv`](https://docs.astral.sh/uv/) et l'adresse IP de votre poêle :
+With [`uv`](https://docs.astral.sh/uv/) and the IP address of your stove:
 
 ```bash
 git clone https://github.com/bbayszczak/pyhaseiq
@@ -135,18 +130,18 @@ cd pyhaseiq
 uv run demo.py 192.168.1.165
 ```
 
-`uv` crée l'environnement et installe les dépendances tout seul. `demo.py` **n'écrit rien** :
-il affiche un tableau rafraîchi en continu avec la phase du poêle et les mesures disponibles.
-C'est le moyen le plus rapide de vérifier que votre poêle répond.
+`uv` creates the environment and installs the dependencies on its own. `demo.py` **writes
+nothing**: it displays a continuously refreshed table with the stove's phase and the available
+readings. It is the quickest way to check that your stove answers.
 
 ---
 
-## État du projet
+## Project status
 
-🚧 **Alpha.** La lecture fonctionne et le protocole est documenté. L'API peut encore changer.
+🚧 **Alpha.** Reading works and the protocol is documented. The API may still change.
 
-Les changements de chaque version sont consignés dans le [CHANGELOG](CHANGELOG.md), tenu à jour
-automatiquement à partir des messages de commit.
+The changes of each version are recorded in the [CHANGELOG](CHANGELOG.md), kept up to date
+automatically from the commit messages.
 
 ---
 
@@ -156,16 +151,16 @@ automatiquement à partir des messages de commit.
 pip install pyhaseiq
 ```
 
-Ou directement depuis le dépôt :
+Or straight from the repository:
 
 ```bash
 pip install git+https://github.com/bbayszczak/pyhaseiq
 ```
 
-## Utilisation
+## Usage
 
-L'API est **asynchrone** : le poêle est un serveur WebSocket, et c'est le modèle qu'attend un
-hôte comme Home Assistant.
+The API is **asynchronous**: the stove is a WebSocket server, and that is the model a host such
+as Home Assistant expects.
 
 ```python
 import asyncio
@@ -179,51 +174,51 @@ async def main() -> None:
         print(phase)  # Phase.HEATING_UP
 
         if phase is Phase.HEATING_UP:
-            print(await stove.get_temperature())  # 163.3 °C dans le foyer
-            print(await stove.get_heat_up_percent())  # 53.5 % de la montée en chauffe
+            print(await stove.get_temperature())  # 163.3 °C in the firebox
+            print(await stove.get_heat_up_percent())  # 53.5 % of the heat-up
         elif phase is Phase.NOMINAL:
-            print(await stove.get_performance())  # 69 % de performance de combustion
+            print(await stove.get_performance())  # 69 % combustion performance
 
 
 asyncio.run(main())
 ```
 
-### Les phases
+### The phases
 
-`get_phase()` rend un [`Phase`](src/pyhaseiq/models.py), qui est un `IntEnum` :
+`get_phase()` returns a [`Phase`](src/pyhaseiq/models.py), which is an `IntEnum`:
 
-| valeur | nom | signification |
+| value | name | meaning |
 |---|---|---|
-| `0` | `Phase.IDLE` | pas de feu, le poêle attend |
-| `1` | `Phase.HEATING_UP` | feu en cours, la température monte |
-| `2` | `Phase.NOMINAL` | température nominale atteinte |
-| `3` | `Phase.NEEDS_WOOD` | il faut recharger en bois |
-| `4` | `Phase.BURNING_OUT` | le feu s'éteint, ne plus ajouter de bois |
+| `0` | `Phase.IDLE` | no fire, the stove is waiting |
+| `1` | `Phase.HEATING_UP` | fire burning, the temperature is rising |
+| `2` | `Phase.NOMINAL` | nominal temperature reached |
+| `3` | `Phase.NEEDS_WOOD` | wood needs to be added |
+| `4` | `Phase.BURNING_OUT` | the fire is dying down, add no more wood |
 
-> ⚠️ **Toutes les mesures ne sont pas lisibles dans toutes les phases.** L'application
-> constructeur ne demande `appT` et `appAufheiz` qu'en phase `HEATING_UP`, et `appP` qu'en
-> phase `NOMINAL`. On ignore si le poêle répond quand même hors de ces phases ou s'il reste
-> muet — auquel cas l'appel se solde par un `ResponseTimeoutError`. **Testez la phase avant de
-> lire**, comme le fait l'exemple ci-dessus.
+> ⚠️ **Not every reading is available in every phase.** The vendor application only asks for
+> `appT` and `appAufheiz` in phase `HEATING_UP`, and for `appP` in phase `NOMINAL`. Whether the
+> stove answers anyway outside those phases or stays silent is unknown — in which case the call
+> ends in a `ResponseTimeoutError`. **Test the phase before reading**, as the example above
+> does.
 
-### Les erreurs
+### The errors
 
-Toutes dérivent de `HaseIQError`, ce qui permet de rattraper la bibliothèque entière d'un seul
-`except` :
+All of them derive from `HaseIQError`, which makes it possible to catch the whole library with
+a single `except`:
 
-| exception | quand |
+| exception | when |
 |---|---|
-| `ConnectionFailedError` | poêle injoignable, ou connexion perdue en cours de dialogue |
-| `ResponseTimeoutError` | le poêle n'a pas répondu dans le délai imparti |
-| `ProtocolError` | réponse illisible, ou phase inconnue |
+| `ConnectionFailedError` | stove unreachable, or connection lost mid-dialogue |
+| `ResponseTimeoutError` | the stove did not answer within the allotted time |
+| `ProtocolError` | unreadable answer, or unknown phase |
 
-Le client **ne se reconnecte jamais tout seul** : il ne conserve aucun état, et la politique de
-reprise appartient à l'appelant. Une connexion perdue reste perdue — ouvrez un nouveau client.
+The client **never reconnects on its own**: it keeps no state, and the retry policy belongs to
+the caller. A lost connection stays lost — open a new client.
 
-### Requêtes brutes
+### Raw requests
 
-Les requêtes documentées mais non exposées par une méthode typée — les séries de mesures, les
-versions du micrologiciel — restent joignables :
+The requests that are documented but not exposed through a typed method — the measurement
+series, the firmware versions — remain reachable:
 
 ```python
 await stove.get("_wversion")  # '1.4'
@@ -231,18 +226,18 @@ await stove.get("appP30Tx")  # '30'
 await stove.get("appP30T[15;29]")  # '41;40;40;40;40;39;...'
 ```
 
-Les noms sont listés dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md).
+The names are listed in [`docs/SPEC-WS-PROTOCOL.md`](docs/SPEC-WS-PROTOCOL.md).
 
-### Essayer sans écrire de code
+### Trying it without writing any code
 
 ```bash
-uv run demo.py 192.168.1.165                      # tableau rafraîchi en continu
-uv run demo.py 192.168.1.165 --once               # une seule lecture
-uv run demo.py 192.168.1.165 --request _wversion  # une requête brute, répétable
-uv run demo.py 192.168.1.165 --debug              # afficher le dialogue WebSocket
+uv run demo.py 192.168.1.165                      # continuously refreshed table
+uv run demo.py 192.168.1.165 --once               # a single reading
+uv run demo.py 192.168.1.165 --request _wversion  # a raw request, repeated
+uv run demo.py 192.168.1.165 --debug              # show the WebSocket dialogue
 ```
 
-Exemple de sortie :
+Sample output:
 
 ```
 ┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -258,16 +253,15 @@ Exemple de sortie :
 
 ## Logging
 
-La bibliothèque utilise le module `logging` standard et **ne configure rien** : ni handler, ni
-niveau, ni format. C'est l'application hôte qui décide. Chaque module a son logger, nommé
-d'après le paquet — `pyhaseiq.client` — ce qui permet de filtrer au paquet entier comme au
-module.
+The library uses the standard `logging` module and **configures nothing**: no handler, no
+level, no format. The host application decides. Each module has its own logger, named after the
+package — `pyhaseiq.client` — which allows filtering on the whole package as well as on a
+single module.
 
-Tout est en `DEBUG` : l'ouverture de la connexion et chaque couple requête / réponse. Les
-erreurs ne sont pas loguées, elles sont **levées** ; c'est à l'appelant de décider ce qu'il en
-fait.
+Everything is at `DEBUG`: opening the connection, and each request / response pair. Errors are
+not logged, they are **raised**; it is up to the caller to decide what to do with them.
 
-Dans Home Assistant, via `configuration.yaml` :
+In Home Assistant, through `configuration.yaml`:
 
 ```yaml
 logger:
@@ -275,7 +269,7 @@ logger:
     pyhaseiq: debug
 ```
 
-En script autonome :
+In a standalone script:
 
 ```python
 import logging
@@ -283,7 +277,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 ```
 
-Exemple de trace :
+Sample trace:
 
 ```
 DEBUG pyhaseiq.client: connecting to ws://192.168.1.165:8080
@@ -292,40 +286,40 @@ DEBUG pyhaseiq.client: appT = 163.3
 DEBUG pyhaseiq.client: appAufheiz = 53.5
 ```
 
-Le poêle n'expose ni identifiant, ni clé, ni donnée personnelle : une trace `DEBUG` peut être
-jointe telle quelle à un rapport de bug.
+The stove exposes no identifier, no key and no personal data: a `DEBUG` trace can be attached
+as is to a bug report.
 
-## Développement
+## Development
 
 ```bash
 uv run ruff check .      # lint
-uv run ruff format .     # formatage
-uv run pytest            # tests — aucun matériel requis, le poêle est simulé
+uv run ruff format .     # formatting
+uv run pytest            # tests — no hardware required, the stove is faked
 ```
 
 ---
 
-## Contribuer
+## Contributing
 
-Les retours sont bienvenus, en particulier sur **d'autres modèles de poêles** et sur la
-génération pilotée par l'application `HASE iQ`, jamais observée.
+Feedback is welcome, especially about **other stove models** and about the generation driven by
+the `HASE iQ` application, which has never been observed.
 
-- **Signaler un bug ou proposer une évolution** —
-  [ouvrir une issue](https://github.com/bbayszczak/pyhaseiq/issues/new/choose), en précisant
-  l'application avec laquelle vous pilotez habituellement votre poêle.
-- **Proposer du code** — périmètre, conventions et interdits sont décrits dans
-  [CONTRIBUTING.md](CONTRIBUTING.md), à lire avant d'ouvrir une pull request.
+- **Report a bug or suggest a change** —
+  [open an issue](https://github.com/bbayszczak/pyhaseiq/issues/new/choose), stating which
+  application you normally drive your stove with.
+- **Propose code** — scope, conventions and prohibitions are described in
+  [CONTRIBUTING.md](CONTRIBUTING.md), to be read before opening a pull request.
 
 ---
 
-## Sécurité
+## Security
 
-Le poêle expose un **WebSocket non chiffré et sans aucune authentification** sur le port
-`8080` : toute machine de votre réseau local peut l'interroger. Ce n'est pas un choix de cette
-bibliothèque, c'est ainsi que le poêle est conçu.
+The stove exposes an **unencrypted WebSocket with no authentication whatsoever** on port
+`8080`: any machine on your local network can query it. This is not a choice of this library,
+it is how the stove is designed.
 
-**N'exposez jamais ce port sur Internet**, et ne le redirigez pas depuis votre box. Laissez le
-poêle sur le réseau local, derrière votre routeur.
+**Never expose this port on the Internet**, and do not forward it from your router. Leave the
+stove on the local network, behind your router.
 
-Pour signaler une faille dans cette bibliothèque, utilisez le
-[signalement privé](SECURITY.md) — jamais une issue publique.
+To report a vulnerability in this library, use the
+[private reporting](SECURITY.md) — never a public issue.

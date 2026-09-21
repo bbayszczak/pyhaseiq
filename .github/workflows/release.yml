@@ -12,25 +12,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Maintient une PR de release à partir des Conventional Commits : elle accumule le
-  # CHANGELOG et le bump de version, et déclenche tag + GitHub Release une fois fusionnée.
+  # Keeps a release PR up to date from the Conventional Commits: it accumulates the CHANGELOG
+  # and the version bump, and triggers tag + GitHub Release once merged.
   release-please:
     name: Release PR
     runs-on: ubuntu-latest
     permissions:
-      # Le GITHUB_TOKEN ne porte plus aucune écriture : le token de l'App s'en charge.
+      # The GITHUB_TOKEN no longer carries any write access: the App token handles that.
       contents: read
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      # release-please s'authentifie en GitHub App plutôt qu'avec le GITHUB_TOKEN, pour deux
-      # raisons. Ce dernier se voit refuser la création de PR tant que le réglage « Allow
-      # GitHub Actions to create and approve pull requests » du dépôt est décoché ; et surtout
-      # ses écritures ne déclenchent aucun workflow, si bien que la PR de release n'obtiendrait
-      # jamais les checks que le ruleset de main exige et resterait infusionnable. Une App est
-      # une identité distincte : ses événements déclenchent la CI, et le token d'installation
-      # qu'on en dérive expire au bout d'une heure.
+      # release-please authenticates as a GitHub App rather than with the GITHUB_TOKEN, for two
+      # reasons. The latter is denied PR creation as long as the repository's "Allow GitHub
+      # Actions to create and approve pull requests" setting is unchecked; and above all its
+      # writes trigger no workflow, so the release PR would never get the checks that main's
+      # ruleset requires and would stay unmergeable. An App is a distinct identity: its events
+      # do trigger the CI, and the installation token derived from it expires after an hour.
       - name: Mint a GitHub App token
         id: app-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -45,11 +44,11 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # release-please bump la version dans pyproject.toml mais ignore uv.lock, qui porte lui
-      # aussi la version du paquet. Sans resynchronisation, le lockfile est périmé dès la
-      # release et le premier `uv run` venu le réécrit. On corrige sur la branche de la PR de
-      # release, avant sa fusion, pour que main ne reçoive jamais de lockfile désaligné.
-      # `uv lock` relit pyproject.toml : la règle survit à tout changement de schéma de version.
+      # release-please bumps the version in pyproject.toml but ignores uv.lock, which also
+      # carries the package version. Without a resync, the lockfile is stale as soon as the
+      # release lands and the next `uv run` rewrites it. We fix it on the release PR branch,
+      # before it is merged, so that main never receives a misaligned lockfile. `uv lock` reads
+      # pyproject.toml back: the rule survives any change of version scheme.
       - name: Check out the release pull request branch
         if: steps.release.outputs.pr
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -64,11 +63,11 @@ jobs:
         if: steps.release.outputs.pr
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          # Le court-circuit n'est pas décoratif : les expressions d'un bloc `env:` de step
-          # sont évaluées avant son `if:`, à la différence de celles d'un `with:`. Sur les runs
-          # qui publient une release au lieu d'ouvrir une PR, `steps.release.outputs.pr` est
-          # vide ; sans garde, `fromJson` recevrait la chaîne vide et ferait échouer le step
-          # alors même qu'il doit être sauté.
+          # The short-circuit is not decorative: the expressions of a step's `env:` block are
+          # evaluated before its `if:`, unlike those of a `with:`. On runs that publish a
+          # release instead of opening a PR, `steps.release.outputs.pr` is empty; without the
+          # guard, `fromJson` would receive the empty string and fail the step even though it
+          # is meant to be skipped.
           BRANCH: ${{ steps.release.outputs.pr && fromJson(steps.release.outputs.pr).headBranchName || '' }}
         run: |
           uv lock
@@ -76,23 +75,23 @@ jobs:
             echo "uv.lock already in sync"
             exit 0
           fi
-          # Le commit passe par l'API et non par `git commit` : le ruleset de main exige des
-          # signatures vérifiées, or un commit fabriqué dans le runner n'est pas signé et
-          # bloquerait la fusion de la PR de release (« Commits must have verified
-          # signatures »). GitHub signe de lui-même les commits créés via son API, comme il
-          # le fait déjà pour ceux de release-please. `sha` est le blob du fichier tel qu'il
-          # est sur la branche : `uv lock` a modifié la copie de travail, pas HEAD.
+          # The commit goes through the API and not through `git commit`: main's ruleset
+          # requires verified signatures, and a commit crafted in the runner is unsigned and
+          # would block the merge of the release PR ("Commits must have verified signatures").
+          # GitHub signs the commits created through its API by itself, as it already does for
+          # release-please's own. `sha` is the file's blob as it stands on the branch: `uv
+          # lock` modified the working copy, not HEAD.
           gh api -X PUT "repos/${{ github.repository }}/contents/uv.lock" \
             -f message="chore: sync uv.lock with the release version" \
             -f branch="$BRANCH" \
             -f sha="$(git rev-parse HEAD:uv.lock)" \
             -f content="$(base64 -w0 uv.lock)"
 
-  # `uv build` exécute le backend hatchling et ses dépendances, soit du code tiers. Ce job
-  # est donc volontairement dépourvu de `id-token: write` : une dépendance de build
-  # compromise n'y trouve aucun jeton OIDC dont elle pourrait se servir pour publier.
-  # Les distributions sont aussi attachées à la GitHub Release, d'où elles restent
-  # installables hors index (`pip install <url du .whl>`).
+  # `uv build` runs the hatchling backend and its dependencies, i.e. third-party code. This job
+  # is therefore deliberately deprived of `id-token: write`: a compromised build dependency
+  # finds no OIDC token there that it could use to publish.
+  # The distributions are also attached to the GitHub Release, from where they stay installable
+  # off-index (`pip install <url of the .whl>`).
   build:
     name: Build distributions
     needs: release-please
@@ -119,11 +118,11 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  # Trusted Publishing : PyPI authentifie le workflow sur le jeton OIDC que GitHub lui
-  # délivre, il n'y a donc aucun token d'API à stocker en secret.
-  # Ce job détient ce jeton, il est donc réduit au strict minimum : pas de checkout, pas de
-  # dépendance, aucun code du dépôt — seulement les distributions déjà construites et
-  # l'action de publication. Rien de ce qui s'y exécute ne provient d'une PR.
+  # Trusted Publishing: PyPI authenticates the workflow on the OIDC token GitHub issues to it,
+  # so there is no API token to store as a secret.
+  # This job holds that token, so it is cut down to the strict minimum: no checkout, no
+  # dependency, no code from the repository — only the already built distributions and the
+  # publishing action. Nothing that runs there comes from a PR.
   publish:
     name: Publish to PyPI
     needs: build
@@ -135,7 +134,7 @@ jobs:
         with:
           name: dist
           path: dist/
-      # L'action refuse de réécrire une version déjà présente sur PyPI : un rejeu du
-      # workflow échoue au lieu de corrompre.
+      # The action refuses to overwrite a version already present on PyPI: a replay of the
+      # workflow fails instead of corrupting anything.
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2

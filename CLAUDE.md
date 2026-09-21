@@ -1,143 +1,143 @@
 # CLAUDE.md
 
-Contexte pour Claude Code sur ce dépôt.
+Context for Claude Code on this repository.
 
-## Le projet
+## The project
 
-`pyhaseiq` est une bibliothèque **en lecture seule** pour les poêles à bois **Hase iQ de la
-génération `flamemonitor`**, via leur WebSocket local. Rien d'autre.
+`pyhaseiq` is a **read-only** library for **Hase iQ wood stoves of the `flamemonitor`
+generation**, over their local WebSocket. Nothing else.
 
-⚠️ **Deux générations portent le nom « Hase iQ ».** Seule l'ancienne, pilotée par l'application
-`flamemonitor`, est supportée ; celle de l'application `HASE iQ` n'a jamais été observée. Ne
-jamais laisser entendre dans la documentation ou le code que la nouvelle fonctionne.
+⚠️ **Two generations carry the name "Hase iQ".** Only the old one, driven by the `flamemonitor`
+application, is supported; the one of the `HASE iQ` application has never been observed. Never
+imply in the documentation or in the code that the new one works.
 
-Le protocole est intégralement décrit dans [`docs/SPEC-PROTOCOLE-WS.md`](docs/SPEC-PROTOCOLE-WS.md),
-reconstitué par rétro-ingénierie à partir de captures réseau qui **ne sont pas versionnées** :
-elles portent les adresses MAC du matériel réel. Chaque affirmation y porte un statut ✅ validé / 🟡 partiel / ❓ supposé : s'y référer avant
-d'implémenter quoi que ce soit, et ne jamais coder sur la foi d'un point ❓.
+The protocol is described in full in [`docs/SPEC-WS-PROTOCOL.md`](docs/SPEC-WS-PROTOCOL.md),
+reconstructed by reverse engineering from network captures that are **not committed**: they
+carry the MAC addresses of the real hardware. Every statement there carries a ✅ confirmed /
+🟡 partial / ❓ assumed status: refer to it before implementing anything, and never write code
+on the strength of a ❓ point.
 
 ## Structure
 
 ```
 src/pyhaseiq/
-  protocol.py    encodage base64 et parsing — fonctions pures, aucune I/O
-  client.py      client asynchrone, sérialise le dialogue
+  protocol.py    base64 encoding and parsing — pure functions, no I/O
+  client.py      asynchronous client, serialises the dialogue
   models.py      Phase
   exceptions.py
 tests/
-  fake.py        faux poêle (serveur WebSocket) rejouant les réponses réelles
+  fake.py        fake stove (WebSocket server) replaying the real answers
 docs/
-  SPEC-PROTOCOLE-WS.md
+  SPEC-WS-PROTOCOL.md
 tools/
-  extract.py     décode un export Wireshark en dialogue lisible
-demo.py          script de démonstration, lecture seule
+  extract.py     decodes a Wireshark export into a readable dialogue
+demo.py          demonstration script, read-only
 ```
 
-## Commandes
+## Commands
 
 ```bash
 uv run ruff check .      # lint
-uv run ruff format .     # formatage
-uv run pytest            # tests, sans matériel
-uv run demo.py <ip>      # lecture live sur un vrai poêle
+uv run ruff format .     # formatting
+uv run pytest            # tests, no hardware
+uv run demo.py <ip>      # live reading on a real stove
 ```
 
-Toujours passer par `uv`. Python ≥ 3.13, CI sur 3.13 et 3.14.
+Always go through `uv`. Python ≥ 3.13, CI on 3.13 and 3.14.
 
 ## Conventions
 
-- **Commits en Conventional Commits**, en anglais. `release-please` s'en sert pour produire le
-  CHANGELOG et la version : seuls `feat:` et `fix:` déclenchent une release.
-- Documentation en français, code et docstrings en anglais.
-- **Logging** : `logging` standard, un `_LOGGER = logging.getLogger(__name__)` par module et
-  **aucune configuration** (ni handler, ni niveau, ni format) — l'hôte, typiquement Home
-  Assistant, possède les handlers et filtre sur `pyhaseiq.<module>`. Tout en `DEBUG`, en
-  formatage paresseux (`_LOGGER.debug("%s = %s", name, value)`), jamais de f-string — les
-  règles ruff `LOG` et `G` le vérifient. Les erreurs se lèvent, elles ne se loguent pas :
-  loguer *et* lever produit un doublon dans les journaux de l'appelant.
-- Le linter est strict (docstrings et annotations obligatoires dans `src/`) ; les tests en sont
-  dispensés via `per-file-ignores`.
-- Les actions GitHub sont **épinglées sur des SHA complets** (un tag comme `@v4` peut être
-  redéplacé sur un autre commit). Dependabot les met à jour ; ne jamais revenir à un tag mobile.
-- Dépôt public : `CONTRIBUTING.md` et `SECURITY.md` font foi côté contributeurs, les garder
-  cohérents avec ce fichier — notamment la liste des interdits ci-dessous.
-- `uv.lock` porte la version du paquet : le workflow de release le resynchronise sur la branche
-  de la PR de release. Ne pas l'éditer à la main, lancer `uv lock` après tout changement de
-  version ou de dépendance.
-- La fusion d'une PR de release publie le paquet sur **PyPI** via le *Trusted Publishing*
-  (OIDC) : aucun token d'API n'est stocké, l'autorisation vit dans le *publisher* déclaré côté
-  PyPI (dépôt `bbayszczak/pyhaseiq`, workflow `release.yml`). Renommer ce fichier ou le dépôt
-  casse la publication tant que le *publisher* n'est pas mis à jour.
-- Le workflow de release sépare volontairement `build` et `publish` : `uv build` exécute du
-  code tiers (hatchling et ses dépendances) et ne doit jamais tourner dans le job qui porte
-  `id-token: write`, sans quoi une dépendance de build compromise pourrait publier sur PyPI.
-  Ne pas refusionner ces deux jobs.
-- `release-please` tourne sous l'identité d'une **GitHub App** dédiée, jamais sous le
-  `GITHUB_TOKEN` : celui-ci ne peut pas ouvrir de PR tant que le réglage « Allow GitHub Actions
-  to create and approve pull requests » du dépôt est décoché, et ses écritures ne déclenchent
-  aucun workflow — la PR de release n'obtiendrait donc jamais les checks que le ruleset de
-  `main` exige et resterait infusionnable. Ses identifiants vivent dans les secrets
-  `RELEASE_PLEASE_CLIENT_ID` et `RELEASE_PLEASE_PRIVATE_KEY`. Le premier porte le **Client
-  ID** de l'App (`Iv23li…`), pas son App ID numérique : l'entrée `app-id` de l'action est
-  dépréciée et `client-id` attend l'autre valeur.
-- Le commit qui resynchronise `uv.lock` est créé par **l'API GitHub**, jamais par un
-  `git commit` dans le *runner* : `main` exige des signatures vérifiées, or un commit fabriqué
-  sur le *runner* n'est pas signé et bloque la fusion de la PR de release. GitHub signe les
-  commits passés par son API, et l'appel porte le token de l'App, donc la CI se redéclenche.
+- **Commits in Conventional Commits**, in English. `release-please` uses them to produce the
+  CHANGELOG and the version: only `feat:` and `fix:` trigger a release.
+- **Everything is written in English**: documentation, code and docstrings. The stove is also
+  sold outside France.
+- **Logging**: standard `logging`, one `_LOGGER = logging.getLogger(__name__)` per module and
+  **no configuration whatsoever** (no handler, no level, no format) — the host, typically Home
+  Assistant, owns the handlers and filters on `pyhaseiq.<module>`. Everything at `DEBUG`, with
+  lazy formatting (`_LOGGER.debug("%s = %s", name, value)`), never an f-string — the ruff `LOG`
+  and `G` rules check this. Errors are raised, not logged: logging *and* raising produces a
+  duplicate in the caller's logs.
+- The linter is strict (docstrings and annotations are mandatory in `src/`); tests are exempt
+  through `per-file-ignores`.
+- GitHub actions are **pinned to full SHAs** (a tag such as `@v4` can be moved onto another
+  commit). Dependabot updates them; never go back to a moving tag.
+- Public repository: `CONTRIBUTING.md` and `SECURITY.md` are authoritative on the contributor
+  side, keep them consistent with this file — in particular the list of prohibitions below.
+- `uv.lock` carries the package version: the release workflow resyncs it on the release PR
+  branch. Do not edit it by hand, run `uv lock` after any change of version or dependency.
+- Merging a release PR publishes the package on **PyPI** through *Trusted Publishing* (OIDC):
+  no API token is stored, the authorisation lives in the *publisher* declared on the PyPI side
+  (repository `bbayszczak/pyhaseiq`, workflow `release.yml`). Renaming that file or the
+  repository breaks publishing until the *publisher* is updated.
+- The release workflow deliberately separates `build` and `publish`: `uv build` runs
+  third-party code (hatchling and its dependencies) and must never run in the job that carries
+  `id-token: write`, otherwise a compromised build dependency could publish to PyPI. Do not
+  merge those two jobs back together.
+- `release-please` runs under the identity of a dedicated **GitHub App**, never under the
+  `GITHUB_TOKEN`: the latter cannot open a PR as long as the repository's "Allow GitHub Actions
+  to create and approve pull requests" setting is unchecked, and its writes trigger no
+  workflow — so the release PR would never get the checks that main's ruleset requires and
+  would stay unmergeable. Its credentials live in the `RELEASE_PLEASE_CLIENT_ID` and
+  `RELEASE_PLEASE_PRIVATE_KEY` secrets. The first carries the App's **Client ID** (`Iv23li…`),
+  not its numeric App ID: the action's `app-id` entry is deprecated and `client-id` expects the
+  other value.
+- The commit that resyncs `uv.lock` is created by **the GitHub API**, never by a `git commit`
+  in the *runner*: `main` requires verified signatures, and a commit crafted in the runner is
+  unsigned and blocks the merge of the release PR. GitHub signs the commits that go through its
+  API, and the call carries the App token, so the CI does get triggered again.
 
-## Principes de conception
+## Design principles
 
-- **Lecture seule, définitivement.** Aucune commande d'écriture n'a été observée dans le
-  protocole et aucune n'est implémentée. C'est la garantie centrale du projet : une
-  bibliothèque qui ne fait que lire ne peut rien casser sur un appareil à combustion installé
-  chez quelqu'un. Ne jamais l'entamer, même « juste pour tester ».
-- **Le client ne connaît aucun état.** Pas de cache, pas d'historique, pas de reconnexion
-  automatique. Une connexion perdue reste perdue et l'appelant en ouvre une neuve. Toute
-  historisation, moyenne ou politique de reprise appartient à la couche appelante.
-- **Dialogue strictement sérialisé.** Le protocole n'a aucun identifiant de corrélation : rien
-  ne rattache une réponse à sa requête sinon l'ordre. D'où le verrou dans `Client.get()`. Le
-  test `test_concurrent_readings_are_serialised_and_never_swap_answers` garde la propriété — il
-  échoue si on retire le verrou.
-- **Cœur asynchrone assumé** : le poêle est un serveur WebSocket et la cible est Home
-  Assistant. Pas de façade synchrone.
+- **Read-only, definitively.** No write command has been observed in the protocol and none is
+  implemented. That is the central guarantee of the project: a library that only reads cannot
+  break anything on a combustion appliance installed in someone's home. Never chip away at it,
+  not even "just to test".
+- **The client knows no state.** No cache, no history, no automatic reconnection. A lost
+  connection stays lost and the caller opens a new one. Any history, average or retry policy
+  belongs to the calling layer.
+- **Strictly serialised dialogue.** The protocol has no correlation identifier: nothing ties an
+  answer to its request but order. Hence the lock in `Client.get()`. The test
+  `test_concurrent_readings_are_serialised_and_never_swap_answers` guards the property — it
+  fails if the lock is removed.
+- **Asynchronous core, assumed**: the stove is a WebSocket server and the target is Home
+  Assistant. No synchronous facade.
 
-## Pièges du protocole
+## Pitfalls of the protocol
 
-- **Le préfixe se retire avec `removeprefix`, jamais avec `lstrip`.** `lstrip` prend un
-  *ensemble de caractères* : `"appT=appT".lstrip("appT=")` rend `""`. C'est un bug réel corrigé
-  ici, gardé par `test_the_prefix_is_removed_as_a_prefix_not_as_a_character_set`.
-- **La valeur peut contenir un `=`** : `_oemver` répond `_oemver=AAF_5815=9`. Ne découper que
-  sur le premier.
-- **Toutes les mesures ne sont pas lisibles dans toutes les phases.** L'application
-  constructeur ne demande `appT` et `appAufheiz` qu'en phase `HEATING_UP`, `appP` qu'en phase
-  `NOMINAL`. On ignore si le poêle répond hors phase ou se tait — auquel cas l'appel part au
-  `ResponseTimeoutError`. Tester la phase avant de lire.
-- **La phase `4` n'a jamais été observée** : elle vient de la documentation du poêle.
+- **The prefix is stripped with `removeprefix`, never with `lstrip`.** `lstrip` takes a *set of
+  characters*: `"appT=appT".lstrip("appT=")` returns `""`. This is a real bug fixed here,
+  guarded by `test_the_prefix_is_removed_as_a_prefix_not_as_a_character_set`.
+- **The value may contain an `=`**: `_oemver` answers `_oemver=AAF_5815=9`. Split on the first
+  one only.
+- **Not every reading is available in every phase.** The vendor application only asks for `appT`
+  and `appAufheiz` in phase `HEATING_UP`, and `appP` in phase `NOMINAL`. Whether the stove
+  answers outside that phase or stays silent is unknown — in which case the call ends in
+  `ResponseTimeoutError`. Test the phase before reading.
+- **Phase `4` has never been observed**: it comes from the stove's documentation.
 
-## À ne pas faire
+## What not to do
 
-- ⛔ **Ne jamais implémenter ni envoyer de commande d'écriture** vers le poêle.
-- ⛔ **Ne pas balayer de noms de requêtes au hasard** sur un poêle réel : on ignore ce qu'un
-  `_req=` inconnu déclenche dans le micrologiciel.
-- ⛔ **Ne pas recalculer `appAufheiz` à partir de `appT`.** La corrélation est forte
-  (R² = 0,992) mais pas exacte : le poêle y mêle autre chose.
-- ⛔ **Ne pas présenter les valeurs lues comme un dispositif de sécurité** — ni dans le code,
-  ni dans la documentation. Elles sont indicatives.
-- ⛔ **Ne jamais committer de capture réseau brute** — `.pcap`, export Wireshark, ou sortie de
-  `tools/extract.py`. Une capture Ethernet porte les **adresses MAC** du poêle et du téléphone,
-  qui sont des identifiants matériels permanents. `records/` est dans `.gitignore` pour cette
-  raison ; ne pas l'en retirer.
+- ⛔ **Never implement or send a write command** to the stove.
+- ⛔ **Do not sweep request names at random** on a real stove: what an unknown `_req=` triggers
+  in the firmware is unknown.
+- ⛔ **Do not recompute `appAufheiz` from `appT`.** The correlation is strong (R² = 0.992) but
+  not exact: the stove mixes something else into it.
+- ⛔ **Do not present the values read as a safety device** — neither in the code nor in the
+  documentation. They are indicative.
+- ⛔ **Never commit a raw network capture** — a `.pcap`, a Wireshark export, or the output of
+  `tools/extract.py`. An Ethernet capture carries the **MAC addresses** of the stove and of the
+  phone, which are permanent hardware identifiers. `records/` is in `.gitignore` for that
+  reason; do not take it out.
 
-## Sécurité
+## Security
 
-Le poêle n'a **aucune authentification** : son WebSocket est ouvert à tout le réseau local.
-C'est un fait matériel, pas une faille de cette bibliothèque. La documentation doit le dire et
-rappeler de ne jamais exposer le port `8080` sur Internet.
+The stove has **no authentication**: its WebSocket is open to the whole local network. That is a
+fact about the hardware, not a flaw in this library. The documentation must say so and remind
+the reader never to expose port `8080` on the Internet.
 
-Les traces ne contiennent ni identifiant, ni clé, ni donnée personnelle : il n'y a rien à
-masquer dans les logs, contrairement à d'autres protocoles domotiques. Si une requête porteuse
-de secret apparaissait un jour, ce constat serait à revoir.
+The traces contain no identifier, no key and no personal data: there is nothing to redact in the
+logs, unlike other home-automation protocols. If a secret-bearing request were ever to appear,
+this assessment would have to be revisited.
 
-Cela vaut pour les traces de la bibliothèque, **pas pour les captures réseau** dont la spec est
-issue : au niveau Ethernet, elles portent les adresses MAC du matériel. Elles restent hors du
-dépôt.
+This holds for the library's traces, **not for the network captures** the spec comes from: at
+the Ethernet level, they carry the hardware's MAC addresses. They stay out of the repository.

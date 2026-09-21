@@ -1,29 +1,29 @@
-name: Proposition
-description: Une évolution de la bibliothèque
+name: Feature request
+description: A change to the library
 labels: [enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        `pyhaseiq` est une bibliothèque **en lecture seule** et **sans état** : elle interroge
-        le poêle, rien d'autre. Historisation, seuils, notifications et toute écriture
-        appartiennent à la couche appelante. Voir [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+        `pyhaseiq` is a **read-only** and **stateless** library: it queries the stove, nothing
+        else. History, thresholds, notifications and any writing belong to the calling layer.
+        See [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
   - type: textarea
-    id: besoin
+    id: need
     attributes:
-      label: Besoin
-      description: Le problème concret que cela résout, pas la solution envisagée.
+      label: Need
+      description: The concrete problem this solves, not the solution you have in mind.
     validations:
       required: true
   - type: textarea
-    id: proposition
+    id: proposal
     attributes:
-      label: Proposition
-      description: Ce que vous imaginez, et l'état de validation du protocole s'il est concerné.
+      label: Proposal
+      description: What you have in mind, and the validation status of the protocol if it is involved.
   - type: checkboxes
-    id: perimetre
+    id: scope
     attributes:
-      label: Périmètre
+      label: Scope
       options:
-        - label: Cette proposition n'écrit rien sur le poêle et ne conserve aucun état dans la bibliothèque.
+        - label: This proposal writes nothing to the stove and keeps no state in the library.
           required: true

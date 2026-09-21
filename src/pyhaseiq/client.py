@@ -101,7 +101,7 @@ class Client:
 
         Exposed so that requests documented but not wrapped in a typed method — the measurement
         series, the firmware versions — stay reachable without patching the library. Names are
-        listed in ``docs/SPEC-PROTOCOLE-WS.md``.
+        listed in ``docs/SPEC-WS-PROTOCOL.md``.
 
         :param name: request name, e.g. ``appT`` or ``_wversion``
         :return: the value the stove answered

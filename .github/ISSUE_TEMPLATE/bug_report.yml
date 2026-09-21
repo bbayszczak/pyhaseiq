@@ -1,52 +1,51 @@
-name: Rapport de bug
-description: Un comportement inattendu de la bibliothèque ou du poêle
+name: Bug report
+description: Unexpected behaviour of the library or of the stove
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        ⚠️ **Deux générations de poêles portent le nom « Hase iQ ».** Cette bibliothèque ne
-        parle qu'à **l'ancienne**, celle pilotée par l'application `flamemonitor`. Si votre
-        poêle se pilote avec l'application `HASE iQ`, elle ne fonctionnera pas — ce n'est pas
-        un bug.
+        ⚠️ **Two generations of stoves carry the name "Hase iQ".** This library only talks to
+        **the old one**, the one driven by the `flamemonitor` application. If your stove is
+        driven with the `HASE iQ` application, it will not work — that is not a bug.
   - type: dropdown
     id: generation
     attributes:
-      label: Application de pilotage
-      description: Celle que vous utilisez habituellement avec votre poêle.
+      label: Driving application
+      description: The one you normally use with your stove.
       options:
-        - flamemonitor (ancienne génération — supportée)
-        - Hase iQ (nouvelle génération — non supportée)
-        - Je ne sais pas
+        - flamemonitor (old generation — supported)
+        - Hase iQ (new generation — not supported)
+        - I don't know
     validations:
       required: true
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: Ce qui se passe, et ce que vous attendiez.
+      description: What happens, and what you expected.
     validations:
       required: true
   - type: textarea
     id: reproduction
     attributes:
       label: Reproduction
-      description: Les étapes, et le code minimal qui déclenche le problème.
+      description: The steps, and the minimal code that triggers the problem.
     validations:
       required: true
   - type: input
     id: versions
     attributes:
-      label: Versions du poêle
+      label: Stove versions
       description: >-
-        Sortie de `uv run demo.py <ip> --request _oemver --request _wversion --request _oemdev`.
+        Output of `uv run demo.py <ip> --request _oemver --request _wversion --request _oemdev`.
       placeholder: _oemver = AAF_5815=9, _wversion = 1.4, _oemdev = 2
     validations:
       required: true
   - type: input
     id: environment
     attributes:
-      label: Environnement
+      label: Environment
       placeholder: macOS 15.4, Python 3.13, pyhaseiq 0.1.0
     validations:
       required: true
@@ -54,5 +53,5 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: Le dialogue WebSocket si vous l'avez (`demo.py --debug`). Rendu en bloc de code.
+      description: The WebSocket dialogue if you have it (`demo.py --debug`). Rendered as a code block.
       render: text

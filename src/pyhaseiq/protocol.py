@@ -3,7 +3,7 @@
 The stove speaks a trivial request/response protocol: the client sends ``_req=<name>``, the
 stove answers ``<name>=<value>``, and both directions are base64-encoded text frames. One
 frame in, exactly one frame out; the stove never speaks first. See
-``docs/SPEC-PROTOCOLE-WS.md`` for the full protocol.
+``docs/SPEC-WS-PROTOCOL.md`` for the full protocol.
 """
 
 from __future__ import annotations
