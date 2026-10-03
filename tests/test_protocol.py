@@ -31,6 +31,11 @@ def test_a_response_is_decoded_and_its_echoed_name_stripped():
     assert decode_response(b64("appT=163.3"), "appT") == "163.3"
 
 
+def test_the_carriage_return_ending_every_stove_frame_is_ignored():
+    # Exact frame read off a live stove: appPhase=0, followed by the stove's trailing '\r'.
+    assert decode_response("YXBwUGhhc2U9MA==\r", "appPhase") == "0"
+
+
 def test_only_the_first_equals_sign_is_stripped():
     # _oemver really answers "_oemver=AAF_5815=9": the value carries its own '='.
     assert decode_response(b64("_oemver=AAF_5815=9"), "_oemver") == "AAF_5815=9"

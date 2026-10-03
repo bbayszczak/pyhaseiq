@@ -107,6 +107,10 @@ Always go through `uv`. Python ≥ 3.13, CI on 3.13 and 3.14.
 - **The prefix is stripped with `removeprefix`, never with `lstrip`.** `lstrip` takes a *set of
   characters*: `"appT=appT".lstrip("appT=")` returns `""`. This is a real bug fixed here,
   guarded by `test_the_prefix_is_removed_as_a_prefix_not_as_a_character_set`.
+- **Every stove frame ends with `\r`**, after the base64 text: `YXBwUGhhc2U9MA==\r`. It is
+  dropped with `removesuffix("\r")` before the strict base64 decoding, which would reject it
+  otherwise. The fake stove sends it too, and
+  `test_the_carriage_return_ending_every_stove_frame_is_ignored` guards it.
 - **The value may contain an `=`**: `_oemver` answers `_oemver=AAF_5815=9`. Split on the first
   one only.
 - **Not every reading is available in every phase.** The vendor application only asks for `appT`
