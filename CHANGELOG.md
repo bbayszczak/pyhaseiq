@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/bbayszczak/pyhaseiq/compare/v0.1.0...v0.1.1) (2026-10-03)
+
+
+### Bug Fixes
+
+* **protocol:** accept the carriage return ending every stove frame ([#9](https://github.com/bbayszczak/pyhaseiq/issues/9)) ([8933637](https://github.com/bbayszczak/pyhaseiq/commit/893363718275dd1cd9821cad9cb752e48ab6c7de))
+
+
+### Documentation
+
+* translate the whole repository to English ([#6](https://github.com/bbayszczak/pyhaseiq/issues/6)) ([b59c77f](https://github.com/bbayszczak/pyhaseiq/commit/b59c77fb2469007506ac0e313a70582c893e3f3c))
+
 ## 0.1.0 (2026-09-21)
 
 
