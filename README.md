@@ -201,6 +201,16 @@ asyncio.run(main())
 > ends in a `ResponseTimeoutError`. **Test the phase before reading**, as the example above
 > does.
 
+`get_status()` does that test for you: it reads the phase, then only the readings the vendor
+application asks for in that phase, and returns a [`Status`](src/pyhaseiq/models.py) in which
+the others are `None`:
+
+```python
+status = await stove.get_status()
+print(status)
+# Status(phase=<Phase.HEATING_UP: 1>, temperature=163.3, heat_up_percent=53.5, performance=None)
+```
+
 ### The errors
 
 All of them derive from `HaseIQError`, which makes it possible to catch the whole library with

@@ -24,7 +24,7 @@ from .exceptions import (
     ProtocolError,
     ResponseTimeoutError,
 )
-from .models import Phase
+from .models import Phase, Status
 
 # A library must not configure logging: the application owns the handlers and the levels.
 # This only keeps the "no handler could be found" warning away when nothing is configured at
@@ -42,4 +42,5 @@ __all__ = [
     "Phase",
     "ProtocolError",
     "ResponseTimeoutError",
+    "Status",
 ]

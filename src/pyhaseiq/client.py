@@ -11,7 +11,7 @@ from websockets.asyncio.client import connect as ws_connect
 from websockets.exceptions import WebSocketException
 
 from .exceptions import ConnectionFailedError, ProtocolError, ResponseTimeoutError
-from .models import Phase
+from .models import Phase, Status
 from .protocol import decode_response, encode_request, parse_float
 
 _LOGGER = logging.getLogger(__name__)
@@ -171,3 +171,23 @@ class Client:
         :return: progress towards the nominal temperature, from 0 to 100
         """
         return parse_float(await self.get("appAufheiz"), "appAufheiz")
+
+    async def get_status(self) -> Status:
+        """Read the phase, then every reading the stove reports in that phase.
+
+        The readings follow the vendor application: the temperature and the heat-up are only
+        asked for in ``HEATING_UP``, the performance only in ``NOMINAL``. Asking outside those
+        phases could leave the stove silent until the timeout, so the others stay ``None``.
+
+        :return: the phase and the readings available in it
+        """
+        phase = await self.get_phase()
+        if phase is Phase.HEATING_UP:
+            return Status(
+                phase,
+                temperature=await self.get_temperature(),
+                heat_up_percent=await self.get_heat_up_percent(),
+            )
+        if phase is Phase.NOMINAL:
+            return Status(phase, performance=await self.get_performance())
+        return Status(phase)
