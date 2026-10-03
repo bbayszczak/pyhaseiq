@@ -27,7 +27,10 @@ def encode_request(name: str) -> str:
 
 
 def decode_response(frame: str, name: str) -> str:
-    """Decode a base64 response frame and strip the request name the stove echoes back.
+    r"""Decode a base64 response frame and strip the request name the stove echoes back.
+
+    The stove ends every frame with a carriage return after the base64 text
+    (``YXBwUGhhc2U9MA==\r``); that single trailing ``\r`` is dropped before decoding.
 
     The stove prefixes every answer with the name it was asked for: ``appT`` is answered
     ``appT=163.3``. Only the leading ``<name>=`` is removed — never more, because a value may
@@ -38,8 +41,11 @@ def decode_response(frame: str, name: str) -> str:
     :return: the value, with the echoed prefix removed
     :raises ProtocolError: if the frame is not base64 UTF-8, or does not echo ``name``
     """
+    # removesuffix, not strip: only the stove's own terminator is tolerated. `validate=True`
+    # rejects any character outside the base64 alphabet, so without this every real answer
+    # would be a ProtocolError.
     try:
-        decoded = base64.b64decode(frame, validate=True).decode()
+        decoded = base64.b64decode(frame.removesuffix("\r"), validate=True).decode()
     except (binascii.Error, ValueError) as error:
         raise ProtocolError(f"response to {name!r} is not valid base64 UTF-8") from error
 

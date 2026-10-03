@@ -65,6 +65,12 @@ Frames are **textual** and **base64-encoded**, in both directions.
 "appPhase=2"     ->  "YXBwUGhhc2U9Mg=="
 ```
 
+> ⚠️ **The stove ends every frame with a carriage return (`\r`)**, after the base64 text:
+> `YXBwUGhhc2U9MA==\r`. ✅ Seen on a live stove and on every stove frame of the captures. It is
+> not part of the base64: it is dropped before decoding, otherwise a strict decoder rejects the
+> frame. The vendor app's frames also end with `\r` in the captures; `pyhaseiq` sends none and
+> the stove answers all the same.
+
 > ⚠️ **The value may contain an `=`.** `_oemver` answers `_oemver=AAF_5815=9`. Only the first
 > `<name>=` is a prefix; it is stripped with `removeprefix`, **never** with `lstrip`, which
 > takes a *set of characters* and would eat into the beginning of the value.
@@ -202,8 +208,9 @@ see the warning above.
    ```
 
    The script writes `<export>.json.parsed.json`, where each packet becomes `{src, dst, ts,
-   payload}` with the payloads decoded. Wireshark joins with a carriage return the WebSocket
-   frames that share a single TCP packet: the script splits them apart again.
+   payload}` with the payloads decoded. Every frame ends with a carriage return (see
+   [Frame encoding](#frame-encoding-)), so the frames that share a single TCP packet come out of
+   Wireshark one after the other, separated by it: the script splits them apart again.
 
 ## What remains open
 

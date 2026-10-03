@@ -60,8 +60,12 @@ async def fake_stove(
             if name not in responses:
                 continue
             value = responses[name]
-            answer = f"{name}={value}" if encode else value
-            await connection.send(base64.b64encode(answer.encode()).decode() if encode else answer)
+            if encode:
+                # The real stove ends every frame with a carriage return after the base64 text.
+                answer = f"{base64.b64encode(f'{name}={value}'.encode()).decode()}\r"
+            else:
+                answer = value
+            await connection.send(answer)
 
     async with serve(handler, "127.0.0.1", 0) as server:
         host, port = server.sockets[0].getsockname()[:2]

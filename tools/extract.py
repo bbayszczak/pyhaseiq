@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """Turn a Wireshark JSON export into the readable dialogue committed next to it.
 
-Wireshark writes the WebSocket payloads base64-encoded, one field per frame, and joins the
-frames of a single TCP packet with a carriage return. This script decodes them and keeps only
-what the protocol analysis needs: who spoke, when, and what was said.
+Wireshark writes the WebSocket payloads base64-encoded, and puts the frames of a single TCP
+packet one after the other. Every frame ends with a carriage return, which therefore separates
+them. This script decodes them and keeps only what the protocol analysis needs: who spoke,
+when, and what was said.
 
 See the "Method" section of ``../docs/SPEC-WS-PROTOCOL.md`` for how to produce the export.
 
@@ -21,7 +22,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-#: Wireshark joins the payloads of several WebSocket frames sharing one TCP packet with this.
+#: Every WebSocket frame ends with this, so it separates the frames sharing one TCP packet.
 FRAME_SEPARATOR = "\r"
 
 
