@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/bbayszczak/pyhaseiq/compare/v0.1.1...v0.2.0) (2026-10-03)
+
+
+### Features
+
+* add get_status() to read every reading available in the current phase ([#10](https://github.com/bbayszczak/pyhaseiq/issues/10)) ([deb553f](https://github.com/bbayszczak/pyhaseiq/commit/deb553fa477c017453b7e3bf042d0804758a0fbc))
+
 ## [0.1.1](https://github.com/bbayszczak/pyhaseiq/compare/v0.1.0...v0.1.1) (2026-10-03)
 
 
