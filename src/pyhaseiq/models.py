@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from enum import IntEnum
 
 
@@ -23,3 +24,18 @@ class Phase(IntEnum):
     NOMINAL = 2
     NEEDS_WOOD = 3
     BURNING_OUT = 4
+
+
+@dataclass(frozen=True, slots=True)
+class Status:
+    """What the stove reports in its current phase, as read by ``Client.get_status()``.
+
+    A reading is ``None`` outside the phase in which the vendor application asks for it: the
+    temperature and the heat-up only in ``HEATING_UP``, the performance only in ``NOMINAL``.
+    Whether the stove answers them in another phase is unknown, so they are not asked for.
+    """
+
+    phase: Phase
+    temperature: float | None = None
+    heat_up_percent: float | None = None
+    performance: float | None = None

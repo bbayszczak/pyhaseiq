@@ -10,6 +10,7 @@ from pyhaseiq import (
     Phase,
     ProtocolError,
     ResponseTimeoutError,
+    Status,
 )
 
 from .fake import fake_stove, unreachable_port
@@ -32,6 +33,33 @@ async def test_every_typed_reading_parses_what_the_stove_answers():
         assert await client.get_phase() is Phase.NOMINAL
         assert await client.get_performance() == 69.0
         assert await client.get_heat_up_percent() == 53.5
+
+
+@pytest.mark.parametrize(
+    ("responses", "expected"),
+    [
+        pytest.param({"appPhase": "0"}, Status(Phase.IDLE), id="idle"),
+        pytest.param(
+            {"appPhase": "1", "appT": "163.3", "appAufheiz": "53.5"},
+            Status(Phase.HEATING_UP, temperature=163.3, heat_up_percent=53.5),
+            id="heating-up",
+        ),
+        pytest.param(
+            {"appPhase": "2", "appP": "69"},
+            Status(Phase.NOMINAL, performance=69.0),
+            id="nominal",
+        ),
+        pytest.param({"appPhase": "3"}, Status(Phase.NEEDS_WOOD), id="needs-wood"),
+        pytest.param({"appPhase": "4"}, Status(Phase.BURNING_OUT), id="burning-out"),
+    ],
+)
+async def test_the_status_only_asks_for_the_readings_of_the_current_phase(responses, expected):
+    # The fake stays silent on any name it does not know, so an extra request would time out.
+    async with (
+        fake_stove(responses) as stove,
+        Client(stove.host, stove.port, timeout=0.2) as client,
+    ):
+        assert await client.get_status() == expected
 
 
 async def test_a_raw_request_reaches_anything_the_protocol_documents():

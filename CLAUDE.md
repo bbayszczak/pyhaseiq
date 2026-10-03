@@ -23,7 +23,7 @@ on the strength of a ❓ point.
 src/pyhaseiq/
   protocol.py    base64 encoding and parsing — pure functions, no I/O
   client.py      asynchronous client, serialises the dialogue
-  models.py      Phase
+  models.py      Phase, Status
   exceptions.py
 tests/
   fake.py        fake stove (WebSocket server) replaying the real answers
@@ -116,7 +116,8 @@ Always go through `uv`. Python ≥ 3.13, CI on 3.13 and 3.14.
 - **Not every reading is available in every phase.** The vendor application only asks for `appT`
   and `appAufheiz` in phase `HEATING_UP`, and `appP` in phase `NOMINAL`. Whether the stove
   answers outside that phase or stays silent is unknown — in which case the call ends in
-  `ResponseTimeoutError`. Test the phase before reading.
+  `ResponseTimeoutError`. Test the phase before reading, or call `Client.get_status()`, which
+  does it.
 - **Phase `4` has never been observed**: it comes from the stove's documentation.
 
 ## What not to do
