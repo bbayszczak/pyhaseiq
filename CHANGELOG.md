@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/bbayszczak/pyhaseiq/compare/v0.2.0...v0.2.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* read the temperature in every phase ([#12](https://github.com/bbayszczak/pyhaseiq/issues/12)) ([3042d76](https://github.com/bbayszczak/pyhaseiq/commit/3042d764626b87bc7e000048a472e92f2bca9cc5))
+
 ## [0.2.0](https://github.com/bbayszczak/pyhaseiq/compare/v0.1.1...v0.2.0) (2026-10-03)
 
 
