@@ -117,6 +117,10 @@ The `flamemonitor` application only queries `appT` and `appAufheiz` in phase 1, 
 phase 2. **Whether the stove answers anyway outside those phases is unknown**, as is whether it
 stays silent: the application simply does not ask, so no capture settles it.
 
+One case is settled outside the captures: ✅ **`appT` is answered in phase 2** — `533.7`, read
+live on 2026-10-10. `Client.get_status()` therefore reads `appT` in every phase; phases 0, 3
+and 4 remain unverified for it.
+
 This unknown has a practical consequence: a request left unanswered blocks the caller until its
 timeout. `demo.py` therefore follows the application and only asks for a reading in the phase
 where it is expected. A caller who steps outside that frame must handle a
@@ -219,5 +223,5 @@ see the warning above.
 - `appNach` and `_l1h`, constant across every capture.
 - The unit and the time step of the `appPT` / `appP30T` series.
 - The stove's behaviour when faced with a request outside its phase: does it answer, or stay
-  silent?
+  silent? Settled only for `appT` in phase 2, which is answered.
 - The existence of a possible write verb — not observed, and not looked for.

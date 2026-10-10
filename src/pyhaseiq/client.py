@@ -135,7 +135,8 @@ class Client:
     async def get_temperature(self) -> float:
         """Read the temperature inside the stove, in degrees Celsius.
 
-        Only meaningful while a fire is going: the stove answers nothing useful when idle.
+        The vendor application only asks for it in ``HEATING_UP``, but the stove answers it in
+        ``NOMINAL`` too; the other phases are unverified.
 
         :return: the temperature in °C
         """
@@ -173,21 +174,22 @@ class Client:
         return parse_float(await self.get("appAufheiz"), "appAufheiz")
 
     async def get_status(self) -> Status:
-        """Read the phase, then every reading the stove reports in that phase.
+        """Read the phase, the temperature, then the readings specific to that phase.
 
-        The readings follow the vendor application: the temperature and the heat-up are only
-        asked for in ``HEATING_UP``, the performance only in ``NOMINAL``. Asking outside those
-        phases could leave the stove silent until the timeout, so the others stay ``None``.
+        The temperature is read in every phase. The heat-up is only asked for in
+        ``HEATING_UP`` and the performance only in ``NOMINAL``, as the vendor application does:
+        asking outside those phases could leave the stove silent until the timeout, so they
+        stay ``None`` elsewhere.
 
-        :return: the phase and the readings available in it
+        :return: the phase, the temperature and the readings available in that phase
         """
         phase = await self.get_phase()
+        # Read in every phase on purpose, although the vendor app only asks for it in
+        # HEATING_UP: the stove answered it live in NOMINAL. IDLE, NEEDS_WOOD and BURNING_OUT
+        # are unverified; a silent stove there would end in ResponseTimeoutError.
+        temperature = await self.get_temperature()
         if phase is Phase.HEATING_UP:
-            return Status(
-                phase,
-                temperature=await self.get_temperature(),
-                heat_up_percent=await self.get_heat_up_percent(),
-            )
+            return Status(phase, temperature, heat_up_percent=await self.get_heat_up_percent())
         if phase is Phase.NOMINAL:
-            return Status(phase, performance=await self.get_performance())
-        return Status(phase)
+            return Status(phase, temperature, performance=await self.get_performance())
+        return Status(phase, temperature)

@@ -38,19 +38,31 @@ async def test_every_typed_reading_parses_what_the_stove_answers():
 @pytest.mark.parametrize(
     ("responses", "expected"),
     [
-        pytest.param({"appPhase": "0"}, Status(Phase.IDLE), id="idle"),
+        pytest.param(
+            {"appPhase": "0", "appT": "163.3"},
+            Status(Phase.IDLE, temperature=163.3),
+            id="idle",
+        ),
         pytest.param(
             {"appPhase": "1", "appT": "163.3", "appAufheiz": "53.5"},
             Status(Phase.HEATING_UP, temperature=163.3, heat_up_percent=53.5),
             id="heating-up",
         ),
         pytest.param(
-            {"appPhase": "2", "appP": "69"},
-            Status(Phase.NOMINAL, performance=69.0),
+            {"appPhase": "2", "appT": "163.3", "appP": "69"},
+            Status(Phase.NOMINAL, temperature=163.3, performance=69.0),
             id="nominal",
         ),
-        pytest.param({"appPhase": "3"}, Status(Phase.NEEDS_WOOD), id="needs-wood"),
-        pytest.param({"appPhase": "4"}, Status(Phase.BURNING_OUT), id="burning-out"),
+        pytest.param(
+            {"appPhase": "3", "appT": "163.3"},
+            Status(Phase.NEEDS_WOOD, temperature=163.3),
+            id="needs-wood",
+        ),
+        pytest.param(
+            {"appPhase": "4", "appT": "163.3"},
+            Status(Phase.BURNING_OUT, temperature=163.3),
+            id="burning-out",
+        ),
     ],
 )
 async def test_the_status_only_asks_for_the_readings_of_the_current_phase(responses, expected):
