@@ -199,11 +199,11 @@ asyncio.run(main())
 > `appT` and `appAufheiz` in phase `HEATING_UP`, and for `appP` in phase `NOMINAL`. Whether the
 > stove answers anyway outside those phases or stays silent is unknown — in which case the call
 > ends in a `ResponseTimeoutError`. **Test the phase before reading**, as the example above
-> does.
+> does. The one exception known so far: the stove answers `appT` in phase `NOMINAL` too.
 
-`get_status()` does that test for you: it reads the phase, then only the readings the vendor
-application asks for in that phase, and returns a [`Status`](src/pyhaseiq/models.py) in which
-the others are `None`:
+`get_status()` does that test for you: it reads the phase, the temperature in every phase, then
+only the other readings the vendor application asks for in that phase, and returns a
+[`Status`](src/pyhaseiq/models.py) in which the others are `None`:
 
 ```python
 status = await stove.get_status()

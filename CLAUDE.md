@@ -117,7 +117,9 @@ Always go through `uv`. Python ≥ 3.13, CI on 3.13 and 3.14.
   and `appAufheiz` in phase `HEATING_UP`, and `appP` in phase `NOMINAL`. Whether the stove
   answers outside that phase or stays silent is unknown — in which case the call ends in
   `ResponseTimeoutError`. Test the phase before reading, or call `Client.get_status()`, which
-  does it.
+  does it. Exception: `get_status()` reads `appT` in every phase, at the maintainer's request —
+  the stove answered it live in `NOMINAL`; `IDLE`, `NEEDS_WOOD` and `BURNING_OUT` are
+  unverified.
 - **Phase `4` has never been observed**: it comes from the stove's documentation.
 
 ## What not to do

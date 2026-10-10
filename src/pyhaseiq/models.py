@@ -30,9 +30,9 @@ class Phase(IntEnum):
 class Status:
     """What the stove reports in its current phase, as read by ``Client.get_status()``.
 
-    A reading is ``None`` outside the phase in which the vendor application asks for it: the
-    temperature and the heat-up only in ``HEATING_UP``, the performance only in ``NOMINAL``.
-    Whether the stove answers them in another phase is unknown, so they are not asked for.
+    The temperature is read in every phase. The heat-up is ``None`` outside ``HEATING_UP`` and
+    the performance outside ``NOMINAL``: the vendor application only asks for them there, and
+    whether the stove answers them in another phase is unknown, so they are not asked for.
     """
 
     phase: Phase
